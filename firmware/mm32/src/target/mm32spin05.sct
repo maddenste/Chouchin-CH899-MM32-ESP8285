@@ -1,0 +1,15 @@
+LR_IROM1 0x08000000 0x00008000 {
+    ER_IROM1 0x08000000 0x00008000 {
+        *(RESET, +First)
+        *(+RO)
+    }
+    DIAG_RAM 0x20000AE0 0x000000A0 {
+        *(PULSE_DIAG)
+    }
+    RW_IRAM1 0x20000000 0x00000AE0 {
+        *(+RW +ZI)
+    }
+    /* Reserve the entire top 1152 bytes. Future data growth must fail
+     * linking instead of silently consuming interrupt stack space. */
+    ARM_LIB_STACK 0x20000B80 EMPTY 0x00000480 { }
+}
