@@ -14,13 +14,14 @@ For **HC32L130J8TA + TXW813-320**, use [the separate HC32 project](https://githu
 
 This replaces firmware on **both chips**. The [original ESP-only project](https://github.com/maddenste/Chouchin-CH899-Firmware) retained the stock MM32 firmware; this project does not.
 
-## Related projects
+## Earlier firmware and the newer board
 
-- **[MM32 + ESP8285 — WiFi Clock v1.5](https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285):** replacement firmware for both the MM32 movement controller and ESP8285 Wi-Fi chip, with selectable movement and battery-saving modes. Currently pre-release.
-- **[HC32L130 + TXW813 — WiFi Clock v2.0](https://github.com/maddenste/Chouchin-899-latest-revision):** the separate project for the newer HC32L130J8TA / TXW813-320 board.
-- **[Original ESP8285-only project](https://github.com/maddenste/Chouchin-CH899-Firmware):** replaces only the ESP8285 Wi-Fi application on the older board, retaining the original MM32 movement firmware.
+WiFi Clock v1.5 replaces **both the MM32 movement application and the ESP8285 Wi-Fi application**. The related projects serve different purposes:
 
-Check both chip markings before choosing a project. Firmware and flashing tools are not interchangeable between board revisions; install a matched pair where both controllers are replaced.
+- **[Original ESP8285-only project](https://github.com/maddenste/Chouchin-CH899-Firmware)** is the earlier option for this board family when you want to retain the manufacturer's MM32 movement firmware. It also contains the original board investigation and photographs. Its ESP image is not the matched Wi-Fi half of this v1.5 replacement.
+- **[WiFi Clock v2.0 for HC32L130 + TXW813](https://github.com/maddenste/Chouchin-899-latest-revision)** supports the newer board and provided the settings-page design used here. Its firmware and programming tools are not compatible with MM32/ESP8285 hardware.
+
+Use this repository's matched MM32/ESP pair and guides; do not combine files from the three projects.
 
 ## Make it your clock
 
