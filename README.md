@@ -14,6 +14,14 @@ For **HC32L130J8TA + TXW813-320**, use [the separate HC32 project](https://githu
 
 This replaces firmware on **both chips**. The [original ESP-only project](https://github.com/maddenste/Chouchin-CH899-Firmware) retained the stock MM32 firmware; this project does not.
 
+## Related projects
+
+- **[MM32 + ESP8285 — WiFi Clock v1.5](https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285):** replacement firmware for both the MM32 movement controller and ESP8285 Wi-Fi chip, with selectable movement and battery-saving modes. Currently pre-release.
+- **[HC32L130 + TXW813 — WiFi Clock v2.0](https://github.com/maddenste/Chouchin-899-latest-revision):** the separate project for the newer HC32L130J8TA / TXW813-320 board.
+- **[Original ESP8285-only project](https://github.com/maddenste/Chouchin-CH899-Firmware):** replaces only the ESP8285 Wi-Fi application on the older board, retaining the original MM32 movement firmware.
+
+Check both chip markings before choosing a project. Firmware and flashing tools are not interchangeable between board revisions; install a matched pair where both controllers are replaced.
+
 ## Make it your clock
 
 - Local Wi-Fi setup, NTP time synchronisation and configurable time zones/DST.
