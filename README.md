@@ -2,6 +2,16 @@
 
 **For the older MM32 revision of the Chouchin CH899 clock.** This upgrade replaces both the hand-movement and Wi-Fi firmware, adding movement styles and seconds-hand battery saving.
 
+## Choose your firmware
+
+| Firmware | Your clock (photos) | What it changes |
+| --- | --- | --- |
+| [**v1.0 — Wi-Fi only**](https://github.com/maddenste/Chouchin-CH899-Firmware) | [Older revision (MM32)](https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285/blob/main/docs/HARDWARE.md) | Improves Wi-Fi setup; keeps the factory hand movement |
+| [**v1.5 — full upgrade**](https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285) | [Older revision (MM32)](https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285/blob/main/docs/HARDWARE.md) | Adds movement styles and seconds-hand parking; replaces movement and Wi-Fi software |
+| [**v2.0 — full upgrade**](https://github.com/maddenste/Chouchin-899-latest-revision) | [Newer revision (HC32)](https://github.com/maddenste/Chouchin-899-latest-revision/blob/main/docs/HARDWARE.md#board-photographs) | Adds movement styles and seconds-hand parking; replaces movement and Wi-Fi software |
+
+Choose by the board inside your clock, not by the highest version number. Follow that project's installation guide and use its files together.
+
 ![Chouchin-CH899 WiFi Clock v1.5 — MM32 and ESP8285](docs/assets/wifi-clock-v1.5-banner.png)
 
 ## Check your clock
@@ -39,11 +49,6 @@ The guide covers the equipment, programming both chips and connecting to Wi-Fi. 
 ## Built from scratch
 
 We began with an undocumented board and protected factory software. Starting with getting the hands to move, we identified the LED and button connections, worked out how the hands find their starting positions, decoded the Wi-Fi messages and investigated the separate timekeeping chip. From that came replacement firmware for both chips, with much of the work devoted to smooth seconds-hand movement. [The project background →](docs/BACKGROUND.md)
-
-## Looking for a different upgrade?
-
-- **[Keep the factory hand movement](https://github.com/maddenste/Chouchin-CH899-Firmware)** — the Wi-Fi-only upgrade for this same older MM32 board.
-- **[Have the newer HC32 revision?](https://github.com/maddenste/Chouchin-899-latest-revision)** — use WiFi Clock v2.0 for that different board. Its [photos](https://github.com/maddenste/Chouchin-899-latest-revision/blob/main/docs/HARDWARE.md#board-photographs) help identify it.
 
 ---
 
