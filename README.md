@@ -33,8 +33,8 @@ From those discoveries, we built replacement firmware for both chips. Much of th
 
 ## Other versions
 
-- **[HC32 board upgrade](https://github.com/maddenste/Chouchin-899-latest-revision)** — WiFi Clock v2.0, for the other board type.
-- **[Wi-Fi-only upgrade](https://github.com/maddenste/Chouchin-CH899-Firmware)** — keeps the MM32 board's factory hand-movement firmware.
+- **[Have an HC32 board? Use WiFi Clock v2.0](https://github.com/maddenste/Chouchin-899-latest-revision)** — similar movement features for different electronics. Its [board photos](https://github.com/maddenste/Chouchin-899-latest-revision/blob/main/docs/HARDWARE.md#board-photographs) help identify it; v2.0 is not an update for this MM32 board.
+- **[Want to keep the factory hand movement? Use the Wi-Fi-only upgrade](https://github.com/maddenste/Chouchin-CH899-Firmware)** — improves setup and internet time synchronisation on the MM32 board, without adding movement styles or seconds-hand parking.
 
 Use the files for your chosen project together; they are not interchangeable.
 
