@@ -25,6 +25,12 @@ The guide covers the equipment, programming both chips and connecting to Wi-Fi. 
 
 [Settings and everyday use](docs/USER_GUIDE.md) · [Help](docs/TROUBLESHOOTING.md) · [Release notes](https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285/releases/tag/v1.5)
 
+## Built from scratch
+
+This began with an existing clock board, no circuit diagram and no access to its protected movement firmware. We started by getting the hands to move, then identified the LED and button connections, worked out how the motors find their starting positions, and traced communication with the Wi-Fi module and the separate timekeeping chip over I²C.
+
+From those discoveries, we built replacement firmware for both chips. Much of the work went into keeping the seconds hand smooth through pauses, restarts and time corrections. [Read the project background →](docs/BACKGROUND.md)
+
 ## Other versions
 
 - **[HC32 board upgrade](https://github.com/maddenste/Chouchin-899-latest-revision)** — WiFi Clock v2.0, for the other board type.
