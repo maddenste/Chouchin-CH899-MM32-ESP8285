@@ -21,7 +21,7 @@ Keep the extracted files together. Do not open the project from inside the ZIP.
 
 ## Before installing
 
-Check [your board](HARDWARE.md), then follow [the installation guide](GETTING_STARTED.md). This package is for **MM32SPIN05PF + ESP8285 / ESP-01F**. Firmware for HC32/TXW813 or the original ESP-only project is not interchangeable.
+Check [which board is inside your clock](HARDWARE.md), then follow [the installation guide](GETTING_STARTED.md). This package is for the **MM32 board** and replaces both its movement and Wi-Fi firmware. Use the files from this package together.
 
 Programming tools are installed separately; the guides show what you need. You do not need to edit or compile firmware.
 

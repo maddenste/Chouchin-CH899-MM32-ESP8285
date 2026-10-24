@@ -1,59 +1,39 @@
 # Chouchin-CH899 · WiFi Clock v1.5
 
-Wi-Fi time synchronisation, configurable hand movement and a simple local settings page.
+Give your clock Wi-Fi time updates, a choice of hand movements and a simple settings page on your phone.
 
-> [!WARNING]
-> **Install at your own risk.** The original factory MM32 movement firmware is read-protected and cannot be read out for a backup. Once you overwrite it, the original firmware cannot be recovered from the chip. This is why the replacement MM32 firmware was built from scratch.
->
-> **Testing is ongoing.** I am continuing to test this firmware. If you find any bugs or unexpected behaviour, please [let me know through GitHub Issues](https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285/issues).
-
-**Check your board first:** this project is for **MM32SPIN05PF + ESP8285 / ESP-01F** only. For **HC32L130J8TA + TXW813-320**, use [WiFi Clock v2.0](https://github.com/maddenste/Chouchin-899-latest-revision). The firmware is not interchangeable.
-
-<img src="docs/photos/06-full-pcb-component-side.jpg" alt="Compatible Chouchin-CH899 MM32 and ESP8285 board" width="350">
-
-## Have a different CH899 board or want an ESP-only upgrade?
-
-- **[WiFi Clock v2.0 — HC32L130 + TXW813](https://github.com/maddenste/Chouchin-899-latest-revision)** supports the newer board with those chip markings. It uses different firmware and programming tools.
-- **[Original ESP8285-only firmware](https://github.com/maddenste/Chouchin-CH899-Firmware)** keeps the manufacturer's MM32 movement firmware and replaces only the Wi-Fi application.
-
-This v1.5 project replaces **both** applications on the tested MM32/ESP8285 board. Do not mix firmware from the three projects.
-
-## Ready to install?
-
-**[Download WiFi Clock v1.5](https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285/releases/download/v1.5/WiFi-Clock-v1.5.zip)** — one ZIP containing both firmware files and the MM32 programming project.
-
-Extract the complete ZIP to a folder on your PC, then follow the installation guide. Open **Install-MM32.uvprojx** when you reach the MM32 programming step; the firmware is already included and selected.
-
-If you experience a bug or unexpected behaviour, please [let me know through GitHub Issues](https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285/issues). Include firmware versions, settings and what happened; for a stopped clock, note hand positions and LED behaviour.
-
-**[Start here: equipment, software and flashing steps →](docs/GETTING_STARTED.md)**
-
-Install the movement and Wi-Fi firmware, then enter your Wi-Fi settings. No compiling, firmware editing, extra components or board modifications are needed.
-
-**Flashing instructions for both chips:** follow the [MM32 programming guide](docs/MM32.md) and [ESP Wi-Fi flashing guide](docs/FLASHING.md). MM32 uses SWD/µVision; ESP uses a 3.3 V USB-to-serial adapter. These are different procedures.
-
-- [Firmware downloads, release notes and checksums](https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285/releases/tag/v1.5)
-- [Current user guide](docs/USER_GUIDE.md)
-- [Help, LED error codes and reporting a problem](docs/TROUBLESHOOTING.md)
-
-The documented procedures were tested on Windows. Other systems may work with suitable tools but have not been verified.
-
-## Make it your clock
-
-- Wi-Fi network, primary NTP server and optional secondary server.
-- Daily updates at **any hour and minute**, plus an early wake for DST changes.
-- Timezone selection, automatic daylight saving and custom POSIX rules.
-- Sweep, Burst or Hold&Start hand movement.
-- Second hand battery saver: Off, Night parking from midnight to 06:00, or On.
-
-Hold&Start recreates the characteristic station-clock motion: the seconds hand pauses at 12, then restarts as the minute hand advances.
-
-Changing movement style or second-hand battery saving restarts the clock and rehomes the hands after saving. The page warns you before this happens.
+- **Sweep, Burst or Hold&Start** — including the station-clock pause at 12.
+- **Battery saving** — park the seconds hand overnight or all day.
+- **Automatic timekeeping** — choose your timezone, daylight saving and daily update time.
 
 <img src="docs/screenshots/setup-desktop.png" alt="WiFi Clock v1.5 settings page" width="700">
 
-[Research and project background](docs/BACKGROUND.md), [source builds](docs/development/BUILD.md) and [test evidence and remaining limits](docs/development/TESTING.md) are documented separately.
+## Will it work with my clock?
+
+There are different circuit boards inside CH899 clocks. This upgrade is for the **MM32 board**. [Compare your board with these photos](docs/HARDWARE.md) before installing; the clock's appearance alone is not enough to identify it.
+
+## Install
+
+**[Download WiFi Clock v1.5](https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285/releases/download/v1.5/WiFi-Clock-v1.5.zip)** · **[Follow the installation guide →](docs/GETTING_STARTED.md)**
+
+The guide covers the equipment, programming both chips and connecting to Wi-Fi. Installation requires opening the clock and connecting a programmer; no compiling or board modifications are needed.
+
+> [!WARNING]
+> **Install at your own risk.** The factory movement firmware is read-protected: it cannot be backed up or recovered from the chip after replacement. This replacement was built from scratch.
+>
+> Testing is ongoing. Please [report any bugs](https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285/issues).
+
+[Settings and everyday use](docs/USER_GUIDE.md) · [Help](docs/TROUBLESHOOTING.md) · [Release notes](https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285/releases/tag/v1.5)
+
+## Other versions
+
+- **[HC32 board upgrade](https://github.com/maddenste/Chouchin-899-latest-revision)** — WiFi Clock v2.0, for the other board type.
+- **[Wi-Fi-only upgrade](https://github.com/maddenste/Chouchin-CH899-Firmware)** — keeps the MM32 board's factory hand-movement firmware.
+
+Use the files for your chosen project together; they are not interchangeable.
+
+---
 
 Unofficial project · WiFi Clock v1.5 — Modified by Steve Madden · 2026.
 
-GPL-3.0-or-later · [License and attribution](NOTICE.md) · [Third-party notices](THIRD_PARTY_NOTICES.md)
+[Background](docs/BACKGROUND.md) · [For developers](docs/development/README.md) · [License and credits](NOTICE.md) · [Third-party notices](THIRD_PARTY_NOTICES.md)
