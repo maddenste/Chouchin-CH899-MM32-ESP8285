@@ -31,7 +31,11 @@ With power removed, connect:
 
 Use the [pad photographs](HARDWARE.md#programming-access). Power the board separately from the regulated 3.3 V supply. **Leave the adapter's VCC/5V/3V3 power wire disconnected.** Never apply 5 V to the board or its signals.
 
-Close any serial monitor or other program using the adapter.
+Before applying clock power:
+
+1. Connect the adapter to USB. In **Device Manager → Ports (COM & LPT)**, note its COM number. Unplug and reconnect its USB cable if you need to identify which entry belongs to it.
+2. Close any serial monitor or other program using the adapter.
+3. Open the extracted package folder in File Explorer. Type **powershell** in its address bar and press Enter.
 
 ## 2. Put the ESP into programming mode
 
@@ -48,13 +52,13 @@ If you make a separate identification or backup read before writing, reset the E
 
 Use the BIN included in the same installation package as the MM32 firmware.
 
-Find your adapter's actual COM port in Windows. The example uses **COM4**; change it if yours is different. Open PowerShell in the extracted package folder and run:
+In the PowerShell window opened earlier, run the command below. Replace **COM4** with your adapter's COM number.
 
 ```powershell
 python -m esptool --chip esp8266 --port COM4 --baud 38400 --before no_reset --after no_reset --no-stub write_flash --flash_mode dout --flash_freq 40m --flash_size 1MB 0x0 'WiFi-Clock-ESP.bin'
 ```
 
-Complete the programming-mode steps above before running the command. Leave the MM32 RESET connection grounded until the transfer finishes.
+Leave the MM32 RESET connection grounded until the transfer finishes. The command says **esp8266** because esptool uses that chip family for the ESP8285 too.
 
 Wait for the transfer to finish successfully. If it fails, stop and check the wiring, COM port, power and boot sequence. Do not add a full-chip erase as a routine fix: that erases saved settings.
 

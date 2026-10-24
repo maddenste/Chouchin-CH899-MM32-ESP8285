@@ -18,11 +18,13 @@ CH899 clocks were made with different circuit boards. [Compare yours with the ph
 You will need:
 
 - A Windows PC.
-- A compatible CMSIS-DAP SWD programmer for the MM32.
+- A [CMSIS-DAP / DAPLink programmer](https://www.ebay.co.uk/itm/254327616482) for the MM32 — the programmer listing used for this project.
 - A USB-to-serial adapter with **3.3 V signals** for the ESP.
 - A regulated **3.3 V supply** and short connecting leads.
 - [Keil µVision](https://www.keil.com/download/product/) and the [MM32 device pack](https://www.keil.arm.com/packs/mm32spin0x_dfp-mindmotion/boards/) for the movement chip.
 - [Python](https://www.python.org/downloads/windows/) and esptool for the Wi-Fi chip. The Wi-Fi installation guide gives the command to install esptool.
+
+Check the model and pin labels before ordering; seller listings can change. The MM32 uses the programmer's **SWD** connection; the ESP uses **serial TX/RX**.
 
 **Remove the batteries before using an external supply.** Check voltage and polarity. Never apply 5 V to the board or its signals. Leave programmer/adapter power outputs disconnected when using the separate supply. All equipment needs a common ground.
 
@@ -48,5 +50,7 @@ The hands will find their starting positions. After Wi-Fi setup, they will move 
 5. Press **Save settings** and allow the hands to finish setting.
 
 If the page is unavailable, hold **M.SET for about three seconds** and try again. If your phone warns that the setup network has no Internet, stay connected while using the local page.
+
+**Finished:** the hands show the correct time and follow your chosen movement style. Wi-Fi normally switches off to save power; hold M.SET again whenever you want to reopen the settings.
 
 Next: [settings and everyday use](USER_GUIDE.md) · [Troubleshooting](TROUBLESHOOTING.md)
