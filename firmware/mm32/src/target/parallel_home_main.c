@@ -959,7 +959,7 @@ static __attribute__((noinline)) void clock_tick_body(void)
         second_polarity ^= 1u;
         second_active = 1u;
     }
-    if (stage == 1u && parallel_log[7] == 0u && tick >= minute_due && minute_active == 0u)
+    if (parallel_log[7] == 0u && tick >= minute_due && minute_active == 0u)
     {
         {
             GPIOB_BSRR = minute_polarity != 0u ? 2u : 4u;
@@ -969,7 +969,7 @@ static __attribute__((noinline)) void clock_tick_body(void)
             minute_end = tick + 4u;
         }
     }
-    if (stage == 1u && minute_active != 0u && tick == minute_end && !parallel_log[7])
+    if (minute_active != 0u && tick == minute_end && !parallel_log[7])
     {
         GPIOB_BSRR = 6u << 16;
         minute_active = 0u;
@@ -1042,7 +1042,7 @@ static __attribute__((noinline)) void clock_tick_body(void)
             }
         }
     }
-    if (stage == 1u && parallel_log[7] != 0u && parallel_log[8] != 0u)
+    if (parallel_log[7] != 0u && parallel_log[8] != 0u)
     {
         if (alignment_recovery == 3u)
         {
@@ -1360,7 +1360,7 @@ int main(void)
 {
     audit_enabled = 1u;
     mode_latched = mode_restart_state = fine_mode_active = 0u;
-    parallel_log[0] = 0x4d50529fu;
+    parallel_log[0] = 0x4d5052a0u;
     rtc_pace[1] = 62499u;
     /* Arm once after C runtime initialization, before enabling SysTick.
      * Existing ISR owns peripheral setup; abort/fault/REC cannot rearm this. */

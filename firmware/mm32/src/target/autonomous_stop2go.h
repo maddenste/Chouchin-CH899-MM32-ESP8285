@@ -439,7 +439,9 @@ void TIM14_Handler(void)
         minute_active = 1u;
         pwm_min_phase = 2u;
         minute_end = parallel_log[4] + 4u;
-        MT(0x34u) = (deadline + fine_min_width) & 65535u;
+        /* A rise may wait for clock housekeeping; never subtract that delay
+         * from its powered width. Subsequent gaps retain the same profile. */
+        MT(0x34u) = (MT(0x24u) + fine_min_width) & 65535u;
     }
     else if (pwm_min_phase == 2u && minute_active)
     {

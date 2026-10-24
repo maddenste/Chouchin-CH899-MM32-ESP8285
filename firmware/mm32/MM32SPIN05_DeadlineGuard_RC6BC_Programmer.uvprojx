@@ -48,7 +48,7 @@
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
           <OutputDirectory>.\build\</OutputDirectory>
-          <OutputName>MM32SPIN05PF_HANDOVER_RC6BB_20261023.hex</OutputName>
+          <OutputName>MM32SPIN05PF_DEADLINE_GUARD_RC6BC_20261024.hex</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>0</CreateHexFile>

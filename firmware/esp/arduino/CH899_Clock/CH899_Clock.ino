@@ -1,9 +1,7 @@
 /*
   Copyright (C) 2026 Steve Madden
   SPDX-License-Identifier: GPL-3.0-or-later
-
   CH899 Clock replacement ESP8285 firmware
-
   Known compatible UART protocol:
     MM32 -> ESP: USER\n
     MM32 -> ESP: CLEAN\n
@@ -11,6 +9,8 @@
     ESP  -> MM32: CLEAN_OK\r\n
     ESP  -> MM32: +TICK\r\n
     ESP  -> MM32: +TIME:Tue Sep  8 12:53:31 2026 +0100 10:00\r\n
+    ESP  -> MM32: SLEEP\r\n
+    MM32 -> ESP: exact accepted +TIME echo, including settings/DST suffix.
   Serial is reserved for the MM32 clock controller.
 */
 
@@ -39,7 +39,7 @@ extern "C" {
 FLASH_MAP_SETUP_CONFIG(FLASH_MAP_NO_FS)
 
 namespace {
-constexpr uint32_t MM32_BAUD = 38400; // Matched to MM32 RC6AL; not the ROM flashing baud.
+constexpr uint32_t MM32_BAUD = 38400; // Application UART; not the ROM flashing baud.
 // A normal MM32-scheduled wake is short.  Give a saved network enough time to
 // obtain DHCP. The setup AP remains available throughout every powered wake.
 constexpr uint32_t WIFI_CONNECT_TIMEOUT_MS = 10000;
@@ -54,9 +54,9 @@ constexpr uint32_t CLEAN_CONFIRM_MIN_MS = 1000;
 constexpr uint32_t CLEAN_CONFIRM_MAX_MS = 4000;
 constexpr uint32_t FACTORY_WIFI_CLEAR_DELAY_MS = 50;
 constexpr uint32_t RESTART_DELAY_MS = 250;
-// In the observed stock M.SET session, the ESP repeats the time record once
-// per second after NTP succeeds. The MM32 ends the wake session; this firmware
-// never drives a sleep pin.
+// Announce whole-second TIME after NTP succeeds. Save-triggered sessions
+// bound confirmation attempts and request SLEEP only after a matching echo.
+// MM32 controls ESP power; this firmware never drives a sleep pin.
 constexpr char FIRMWARE_VERSION[] = "WiFi Clock v1.5";
 constexpr char AP_NAME[] = "WiFi-Clock-Setup";
 constexpr char DEFAULT_NTP_HOST[] = "pool.ntp.org";
@@ -322,8 +322,8 @@ bool loadConfig() {
   config.timezone = stored.timezone[0] ? stored.timezone : DEFAULT_TIMEZONE;
   config.syncHour = stored.syncHour; config.syncMinute = stored.syncMinute;
   config.movementMode = stored.movementMode; config.secondsParking = stored.secondsParking;
-  // No EEPROM write on migration. Old five-minute schedules remain active
-  // until an explicit save; the unchanged HC32 page explains its rounding.
+  // Migration does not write EEPROM. Retain the saved hour/minute exactly;
+  // the current time picker accepts every civil minute without rounding.
   return !config.ssid.isEmpty() && config.ntpHost.length() <= 127 &&
       config.ntpBackupHost.length() <= 127 &&
       clock_validation::validNtpHost(config.ntpHost.c_str(), config.ntpHost.length()) &&
@@ -768,7 +768,7 @@ void sendStatus() {
   const char *mode = connected ? "station" : (portalActive ? "portal" : "offline");
   const String body = String("{\"apiVersion\":1,\"mode\":\"") + mode +
       "\",\"firmwareVersion\":\"" + FIRMWARE_VERSION +
-      "\",\"buildId\":\"ESP8285 MM32 v1.5 R12 20261023\",\"ip\":\"" +
+      "\",\"buildId\":\"ESP8285 MM32 v1.5 R13 20261024\",\"ip\":\"" +
       (connected ? WiFi.localIP().toString() : WiFi.softAPIP().toString()) +
       "\",\"connected\":" + (connected ? "true" : "false") +
       ",\"timeSynced\":" + (ntpResponseReceived ? "true" : "false") +

@@ -38,7 +38,7 @@ Being able to open the page does not by itself mean the clock has received valid
 
 Note whether it happens after a pause at 12, a daily update, saving settings or the hands finishing their initial setting. Also note whether the following revolution is different.
 
-Check with the programming/debug session closed. If it continues, [report it](https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285/issues). Intermittent uneven seconds movement is still part of this pre-release project's testing; it is not something to ignore before release.
+Check with the programming/debug session closed. If it continues, [report it](https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285/issues). The owner reported consistently smooth seconds movement with RC6BC. If movement becomes uneven, include the mode and preceding action in your report.
 
 ## Error codes
 

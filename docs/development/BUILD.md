@@ -1,6 +1,6 @@
 # Build the supplied source
 
-For developers. Prepared installation files will be listed on [the downloads page](../DOWNLOADS.md) when available; ordinary users should not need to compile.
+For developers. Prepared installation files are listed on [the downloads page](../DOWNLOADS.md); ordinary users do not need to compile.
 
 Building, exporting and flashing are separate operations. Nothing in these build/test steps flashes a clock.
 

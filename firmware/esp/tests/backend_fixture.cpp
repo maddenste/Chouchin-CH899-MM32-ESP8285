@@ -29,18 +29,19 @@ struct FakeEEPROM {
 } EEPROM;
 struct FakeWeb {
   const char *mode="0",*park="1",*hour="10",*minute="00",*network="Home",*password="";
+  const char *ntp="pool.ntp.org",*backup="",*zone="GMT0BST,M3.5.0/1,M10.5.0/2";
   unsigned status=0;
   String arg(const char *key) {
     if(!strcmp(key,"minute_hand"))return strlen(mode)==1 && mode[0]>='0' && mode[0]<='3' ? ((mode[0]-'0')&1 ? "jump":"gradual"):"invalid";
     if(!strcmp(key,"second_hand"))return strlen(mode)==1 && mode[0]>='0' && mode[0]<='3' ? ((mode[0]-'0')&2 ? "pause_at_12":"continuous"):"invalid";
     if(!strcmp(key,"night_parking"))return !strcmp(park,"0")?"off":!strcmp(park,"1")?"night":!strcmp(park,"2")?"on":"invalid";
-    if(!strcmp(key,"ntpBackupHost"))return "";
+    if(!strcmp(key,"ntpBackupHost"))return backup;
     if(!strcmp(key,"syncHour"))return hour;
     if(!strcmp(key,"syncMinute"))return minute;
     if(!strcmp(key,"ssid"))return network;
     if(!strcmp(key,"password"))return password;
-    if(!strcmp(key,"ntpHost"))return "pool.ntp.org";
-    if(!strcmp(key,"timezone"))return "GMT0BST,M3.5.0/1,M10.5.0/2";
+    if(!strcmp(key,"ntpHost"))return ntp;
+    if(!strcmp(key,"timezone"))return zone;
     return "";
   }
   void send(unsigned code,const char *,const char *) { status=code; }
@@ -179,8 +180,8 @@ bool loadConfig() {
   config.timezone = stored.timezone[0] ? stored.timezone : DEFAULT_TIMEZONE;
   config.syncHour = stored.syncHour; config.syncMinute = stored.syncMinute;
   config.movementMode = stored.movementMode; config.secondsParking = stored.secondsParking;
-  // No EEPROM write on migration. Old five-minute schedules remain active
-  // until an explicit save; the unchanged HC32 page explains its rounding.
+  // Migration does not write EEPROM. Retain the saved hour/minute exactly;
+  // the current time picker accepts every civil minute without rounding.
   return !config.ssid.isEmpty() && config.ntpHost.length() <= 127 &&
       config.ntpBackupHost.length() <= 127 &&
       clock_validation::validNtpHost(config.ntpHost.c_str(), config.ntpHost.length()) &&
@@ -327,6 +328,19 @@ extern "C" unsigned httpCase(unsigned mode,unsigned park,unsigned variant) {
   return 0;
 }
 char wire[64];
+extern "C" unsigned expandedInputCase(unsigned scenario) {
+  resetFixture();
+  char password[66];memset(password,'a',sizeof(password));password[scenario==1?65:64]=0;
+  web.password=password;
+  web.ntp="pool.ntp.org.";web.backup="backup.example.net.";
+  web.zone="ABCDEFGHIJ-1:00:00KLMNOPQRST-2:00:00,M10.4.5/13:00:00,M10.4.6/13:00:00";
+  updateConfig();
+  if(scenario==1)return web.status==400 && !EEPROM.commits?0:1;
+  if(web.status!=200 || EEPROM.commits!=1)return 2;
+  config=ClockConfig();
+  if(!loadConfig() || config.password.length()!=64 || config.timezone.length()<=64)return 3;
+  return strcmp(config.ntpHost.c_str(),web.ntp) || strcmp(config.ntpBackupHost.c_str(),web.backup)?4:0;
+}
 extern "C" unsigned minuteHttpCase(unsigned hour,unsigned minute) {
   resetFixture();char h[4],m[4];
   h[0]='0'+hour/10;h[1]='0'+hour%10;h[2]=0;

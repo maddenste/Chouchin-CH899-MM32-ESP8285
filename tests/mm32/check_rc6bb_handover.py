@@ -5,10 +5,10 @@ from pathlib import Path
 import check_rc6ba_audit as baseline
 from unicorn import UC_HOOK_MEM_WRITE
 
-IMAGE=Path(__file__).resolve().parents[2]/'firmware/mm32/build/MM32SPIN05PF_HANDOVER_RC6BB_20261023.axf'
+IMAGE=Path(__file__).resolve().parents[2]/'firmware/mm32/build/MM32SPIN05PF_DEADLINE_GUARD_RC6BC_20261024.axf'
 for cls in (baseline.Tests,baseline.Buttons,baseline.General,baseline.RTCChecks,baseline.RecoveryChecks):
     cls.artifact=IMAGE
-    cls.signature=0x4d50529f
+    cls.signature=0x4d5052a0
 
 class Handover(baseline.Tests):
     def prepare(self,phase=17000,down=False):

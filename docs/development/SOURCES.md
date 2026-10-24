@@ -11,10 +11,12 @@ These snapshots establish provenance, not current instructions. The boards and f
 
 ## Development findings
 
-Runtime seconds drive uses alternating hardware PWM, a hardware pulse counter and DMA output stop. Ordinary holds preserve the waveform. Movement/saver changes request a safe full restart rather than a live reconfiguration. Save uses an exact TIME echo before an ESP shutdown request. Corrections retain immutable in-flight and deferred-latest records. ESP R12 retains fractional NTP time and sends at whole-second boundaries.
+Runtime seconds drive uses alternating hardware PWM, a hardware pulse counter and DMA output stop. Ordinary holds preserve the waveform. Movement/saver changes request a safe full restart rather than a live reconfiguration. Save uses an exact TIME echo before an ESP shutdown request. Corrections retain immutable in-flight and deferred-latest records. ESP R13 retains fractional NTP time and sends at whole-second boundaries.
 
 RC6BB makes the timer interrupt the sole owner of warm release. Initial observations improved, but that does not establish a general root cause or complete the endurance test. Software models passed some earlier cases in which physical movement still varied.
 
 A data sheet establishes possible chip capability, not a routed PCB connection. No direct RTC CLKOUT wire is required or assumed. SWD samples do not establish analogue coil drive or rotor behavior.
 
 Public photos are existing metadata-stripped copies. Personal originals, credentials, per-device backups and private captures remain outside the repository. See [NOTICE](../../NOTICE.md) and [third-party notices](../../THIRD_PARTY_NOTICES.md).
+
+RC6BC adds deadline-aware minute scheduling and full powered widths for delayed minute rises. R13 updates the MM32 project link and aligns webpage input limits with the existing backend. Details and evidence are in [the release record](RELEASE_IDENTITY.md).

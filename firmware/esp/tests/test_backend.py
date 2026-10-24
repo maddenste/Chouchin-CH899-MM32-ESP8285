@@ -23,6 +23,9 @@ def machine(elf_path):
         return cpu.reg_read(UC_ARM_REG_R0)
     return cpu,symbols,call
 cpu,symbols,call=machine(axf);cases=0
+for scenario in (0,1):
+    assert call('expandedInputCase',scenario)==0,('R13 expanded inputs',scenario)
+print('PASS R13 trailing-dot NTP, 64-character credential, long POSIX persistence and over-limit rejection')
 for hour in range(24):
     for minute in range(60):
         assert call('minuteHttpCase',hour,minute)==0,(hour,minute)
@@ -38,7 +41,7 @@ for mode in range(4):
     for park in range(3):
         assert call('extendedLegacyCase',mode,park)==0,(mode,park)
         cases+=1
-parser_axf=WORKSPACE/'firmware/mm32/build/MM32SPIN05PF_HANDOVER_RC6BB_20261023.axf'
+parser_axf=WORKSPACE/'firmware/mm32/build/MM32SPIN05PF_DEADLINE_GUARD_RC6BC_20261024.axf'
 parser,_,parse=machine(parser_axf)
 for mode in range(4):
     for park in range(3):
@@ -186,7 +189,7 @@ for scenario in range(10):
 assert transport_call('wholeSecondCase')==0,'whole-second send window'
 print('PASS fractional NTP, latency/processing correction, carry/era/invalid-reply guards and whole-second send-window cases')
 sys.path.insert(0,str(WORKSPACE/'tests/mm32'))
-from check_rc6bb_handover import baseline
+from check_rc6bc_deadline_guard import baseline
 MM32=baseline.Tests
 MM32.setUpClass()
 assert re.search(r'constexpr uint32_t MM32_BAUD = 38400;',source)
@@ -203,4 +206,4 @@ for style in (3,0):
     assert controller.word('minute_log',190)==(style!=3)
     transport.mem_write(0x2000e000,echoed[1:-2]+b'\0')
     assert transport_call('bridgeEcho',0x2000e000)==1,('MM32 echo -> confirmed SLEEP',style)
-print('PASS matched 38400-baud settings plus 2 compiled ESP R12 TIME -> actual RC6BB echo -> confirmed SLEEP cases, including mode restart')
+print('PASS matched 38400-baud settings plus 2 compiled ESP R12 TIME -> actual RC6AY echo -> confirmed SLEEP cases, including mode restart')

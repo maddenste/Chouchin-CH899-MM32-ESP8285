@@ -147,6 +147,7 @@ static void quartz_poll(void)
         quartz_reject();
         return;
     }
-    /* Consistent completion timestamps; read uncertainty averages over>=2s. */
+    /* Consistent completion timestamps; a calibration window accumulates
+     * at least8192 countdown ticks (about2s at4096Hz). */
     quartz_sample(raw, after, after - before);
 }

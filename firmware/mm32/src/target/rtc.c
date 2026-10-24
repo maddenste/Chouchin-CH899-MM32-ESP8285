@@ -1,6 +1,8 @@
-/* PCF8563 calendar access on PB8/PB9. Only registers 02..08 are written,
+/* PCF8563 calendar access on PB8/PB9. Calendar writes use registers02..08
  * at acquisition or an authorized correction after movement has drained.
- * RTC controls, alarms, timer and CLKOUT configuration are preserved. */
+ * rtc_counter.h separately owns the non-interrupting countdown reference;
+ * it pauses that reference before calendar verification. Alarms and CLKOUT
+ * configuration are preserved. */
 #include "movement_api.h"
 #define REG32(a) (*(volatile uint32_t *)(a))
 #define GPIOB_BSRR REG32(0x48000410u)
@@ -309,7 +311,7 @@ done:
 }
 uint32_t rtc_motion_set(const Mm32UartEvent *e)
 {
-    /* Stop the experimental timer before the unchanged full-register
+    /* Pause the countdown reference before the full-register
      * calendar write/verification. Calendar, alarms and CLKOUT stay intact. */
     if (!counter_before_calendar())
         return 0u;
@@ -373,56 +375,6 @@ uint32_t rtc_event_advance(Mm32UartEvent *e, uint32_t seconds)
     e->hour = time / 3600u;
     e->minute = (time / 60u) % 60u;
     e->second = time % 60u;
-    return 1u;
-}
-/* DST changes the offset, not the running seconds phase. Select the nearest
- * whole-minute offset with the requested seconds; never truncate :59 to :00
- * in the same minute. Small negative shifts must borrow the calendar too. */
-uint32_t rtc_event_align_seconds(Mm32UartEvent *e, uint32_t second)
-{
-    if (second > 59u)
-        return 0u;
-    int32_t shift = (int32_t)second - (int32_t)e->second;
-    if (shift > 30)
-        shift -= 60;
-    if (shift < -30)
-        shift += 60;
-    if (shift >= 0)
-        return rtc_event_advance(e, (uint32_t)shift);
-    uint32_t back = (uint32_t)-shift;
-    if (e->second >= back)
-        e->second -= back;
-    else
-    {
-        e->second = 60u + e->second - back;
-        if (e->minute)
-            --e->minute;
-        else
-        {
-            e->minute = 59u;
-            if (e->hour)
-                --e->hour;
-            else
-            {
-                e->hour = 23u;
-                if (e->day > 1u)
-                    --e->day;
-                else
-                {
-                    if (e->month > 1u)
-                        --e->month;
-                    else
-                    {
-                        if (e->year <= 2000u)
-                            return 0u;
-                        --e->year;
-                        e->month = 12u;
-                    }
-                    e->day = month_days(e->year, e->month);
-                }
-            }
-        }
-    }
     return 1u;
 }
 uint32_t rtc_motion_stamp(void)

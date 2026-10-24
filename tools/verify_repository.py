@@ -54,13 +54,16 @@ for file in docs:
             problems.append(f'Broken local link in {file.relative_to(ROOT)}: {link}')
 
 main = (ROOT / 'firmware/mm32/src/target/parallel_home_main.c').read_text()
-if '0x4d50529fu' not in main:
-    problems.append('MM32 source is not RC6BB')
+if '0x4d5052a0u' not in main:
+    problems.append('MM32 source is not RC6BC')
 auto = (ROOT / 'firmware/mm32/src/target/autonomous_stop2go.h').read_text()
 irq = (ROOT / 'firmware/mm32/src/target/fine_stop2go.h').read_text()
 if auto.count('pwm_try_resume();') != 0 or irq.count('pwm_try_resume();') != 1:
     problems.append('Warm release no longer has exactly one timer-owned caller')
 html = (ROOT / 'firmware/esp/arduino/CH899_Clock/web/index.html').read_text(encoding='utf-8-sig')
+esp_main = (ROOT / 'firmware/esp/arduino/CH899_Clock/CH899_Clock.ino').read_text()
+if 'ESP8285 MM32 v1.5 R13 20261024' not in esp_main:
+    problems.append('ESP source is not R13')
 header = (ROOT / 'firmware/esp/arduino/CH899_Clock/web_ui.h').read_text(encoding='utf-8-sig')
 if '\n' + html + '\n)CH899_WEB";' not in header:
     problems.append('Generated webpage header is stale')

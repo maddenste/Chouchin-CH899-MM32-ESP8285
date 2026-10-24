@@ -1,6 +1,6 @@
 # What is new in v1.5?
 
-**WiFi Clock v1.5 is still being tested; there is no ready-to-install release yet.** Check [release status](DOWNLOADS.md) before planning an upgrade.
+**WiFi Clock v1.5 — MM32 RC6BC + ESP R13** is available from [downloads](DOWNLOADS.md).
 
 Compared with the earlier ESP-only project, v1.5 also replaces the movement controller's firmware, allowing:
 
@@ -13,6 +13,6 @@ Compared with the earlier ESP-only project, v1.5 also replaces the movement cont
 
 Changing movement style or second-hand battery saving restarts and sets the clock again after saving. The settings page warns you before this happens.
 
-The initial public source tree was prepared on **24 October 2026**. Current build identifiers and technical changes are kept in [the developer release notes](development/RELEASE_IDENTITY.md).
+The initial public source tree was prepared on **24 October 2026**. The v1.5 release uses MM32 RC6BC and ESP R13. Current build identifiers and technical changes are kept in [the developer release notes](development/RELEASE_IDENTITY.md).
 
 The [original ESP-only firmware](https://github.com/maddenste/Chouchin-CH899-Firmware) remains a separate option that retains the manufacturer's MM32 software. The [HC32/TXW813 version](https://github.com/maddenste/Chouchin-899-latest-revision) is for different hardware.

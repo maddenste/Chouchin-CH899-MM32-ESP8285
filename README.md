@@ -1,52 +1,53 @@
-# Chouchin CH899 · WiFi Clock v1.5
+# Chouchin-CH899 · WiFi Clock v1.5
 
-Keep your clock on time over Wi-Fi, choose how its hands move, and change its settings from your phone or computer.
+Wi-Fi time synchronisation, configurable hand movement and a simple local settings page.
 
-**Still in testing:** a ready-to-install release is not available yet. See [downloads and release status](docs/DOWNLOADS.md).
+**Check your board first:** this project is for **MM32SPIN05PF + ESP8285 / ESP-01F** only. For **HC32L130J8TA + TXW813-320**, use [WiFi Clock v2.0](https://github.com/maddenste/Chouchin-899-latest-revision). The firmware is not interchangeable.
 
-## What you can change
+<img src="docs/photos/06-full-pcb-component-side.jpg" alt="Compatible Chouchin-CH899 MM32 and ESP8285 board" width="350">
 
-- **Movement style:** Sweep, Burst or Hold&Start, which pauses the seconds hand at 12 before starting the next minute.
-- **Second-hand battery saving:** leave it running, park it overnight from midnight to 06:00, or keep it parked all day. The minute and hour hands keep working.
-- **Daily time update:** choose any hour and minute.
-- **Timezone and daylight saving:** select your location, with automatic clock changes where supported.
-- **Wi-Fi and time servers:** configure them in a local webpage. No cloud account or phone app is needed.
+## Have a different CH899 board or want an ESP-only upgrade?
 
-<img src="docs/screenshots/setup-desktop.png" alt="WiFi Clock settings page showing movement, battery saving and daily update controls" width="700">
+- **[WiFi Clock v2.0 — HC32L130 + TXW813](https://github.com/maddenste/Chouchin-899-latest-revision)** supports the newer board with those chip markings. It uses different firmware and programming tools.
+- **[Original ESP8285-only firmware](https://github.com/maddenste/Chouchin-CH899-Firmware)** keeps the manufacturer's MM32 movement firmware and replaces only the Wi-Fi application.
 
-## Getting started
+This v1.5 project replaces **both** applications on the tested MM32/ESP8285 board. Do not mix firmware from the three projects.
 
-1. [Check that your board is compatible](docs/HARDWARE.md).
-2. [Read the installation guide](docs/GETTING_STARTED.md) before connecting a programmer.
-3. [Set up Wi-Fi and choose your preferences](docs/USER_GUIDE.md).
+## Ready to install?
 
-Installation replaces firmware on **both chips** and needs programming equipment and access to the circuit board. No extra components or changes to the board's circuitry are needed.
+Download **[MM32 RC6BC HEX](https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285/releases/download/v1.5/MM32SPIN05PF_DEADLINE_GUARD_RC6BC_20261024.hex)** for the **movement controller** and **[ESP R13 BIN](https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285/releases/download/v1.5/Chouchin-899-MM32-ESP-v1.5-R13-20261024.bin)** for the **Wi-Fi chip**.
 
-## Is this the right clock?
+These are the two firmware files needed. Also download the **[MM32 programming project](https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285/releases/download/v1.5/WiFi-Clock-v1.5-MM32-Programmer.zip)** and keep its HEX in the supplied `build` folder.
 
-This project supports the tested **MM32SPIN05PF + ESP8285 / ESP-01F** board. Check the chip markings: the CH899 name or enclosure alone is not enough.
+If you experience a bug or unexpected behaviour, please [let me know through GitHub Issues](https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285/issues). Include firmware versions, settings and what happened; for a stopped clock, note hand positions and LED behaviour.
 
-<img src="docs/photos/06-full-pcb-component-side.jpg" alt="Compatible MM32 and ESP8285 clock board" width="450">
+**[Start here: equipment, software and flashing steps →](docs/GETTING_STARTED.md)**
 
-### Other CH899 projects
+No compiling or firmware editing is required. Install the two prepared files, then enter your Wi-Fi settings. No extra components or board modifications are needed.
 
-- **[Original ESP8285-only firmware](https://github.com/maddenste/Chouchin-CH899-Firmware)** keeps the manufacturer's MM32 movement firmware and replaces only the Wi-Fi application. It is a different option for the older board, not the Wi-Fi half of this upgrade.
-- **[WiFi Clock v2.0 for HC32L130 + TXW813](https://github.com/maddenste/Chouchin-899-latest-revision)** is for the newer board with those chip markings. Its firmware and programming tools cannot be used on MM32/ESP8285 hardware.
+**Flashing instructions for both chips:** follow the [MM32 programming guide](docs/MM32.md) and [ESP Wi-Fi flashing guide](docs/FLASHING.md). MM32 uses SWD/µVision; ESP uses a 3.3 V USB-to-serial adapter. These are different procedures.
 
-Use the two firmware files supplied together for this project; do not mix files from the three repositories.
+- [Firmware downloads, release notes and checksums](https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285/releases/tag/v1.5)
+- [Current user guide](docs/USER_GUIDE.md)
+- [Help, LED error codes and reporting a problem](docs/TROUBLESHOOTING.md)
 
-## Using your clock
+The documented procedures were tested on Windows. Other systems may work with suitable tools but have not been verified.
 
-- [Settings, movement styles and buttons](docs/USER_GUIDE.md)
-- [LED meanings, error codes and help](docs/TROUBLESHOOTING.md)
-- [What is new in v1.5](docs/HISTORY.md)
-- [How the project started](docs/BACKGROUND.md)
+## Make it your clock
 
-For a problem, [open an issue](https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285/issues) with your firmware versions, settings and a description of what happened. Please do not include Wi-Fi passwords or private device backups.
+- Wi-Fi network, primary NTP server and optional secondary server.
+- Daily updates at **any hour and minute**, plus an early wake for DST changes.
+- Timezone selection, automatic daylight saving and custom POSIX rules.
+- Sweep, Burst or Hold&Start hand movement.
+- Second hand battery saver: Off, Night parking from midnight to 06:00, or On.
 
-## For developers
+Hold&Start recreates the characteristic station-clock motion: the seconds hand pauses at 12, then restarts as the minute hand advances.
 
-[Source builds, testing, hardware details and the communication protocol](docs/development/README.md) are documented separately. You do not need these to use an installed clock.
+Changing movement style or second-hand battery saving restarts the clock and rehomes the hands after saving. The page warns you before this happens.
+
+<img src="docs/screenshots/setup-desktop.png" alt="WiFi Clock v1.5 settings page" width="700">
+
+[Research and project background](docs/BACKGROUND.md), [source builds](docs/development/BUILD.md) and [test evidence and remaining limits](docs/development/TESTING.md) are documented separately.
 
 Unofficial project · WiFi Clock v1.5 — Modified by Steve Madden · 2026.
 

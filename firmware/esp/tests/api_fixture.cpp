@@ -27,7 +27,7 @@ struct Ip {const char *s;String toString()const{return s;}};
 struct Wifi {
  int link=3;int status(){return link;}
  Ip softAPIP(){return {"192.168.4.1"};}Ip localIP(){return {"192.168.0.111"};}
- void macAddress(uint8_t *p){uint8_t m[]={0x02,0x00,0x00,0xab,0xcd,0xef};memcpy(p,m,6);}
+ void macAddress(uint8_t *p){uint8_t m[]={0x8c,0xce,0x4e,0x32,0x1a,0x86};memcpy(p,m,6);}
 }WiFi;
 struct Web {
  const char *host="192.168.0.111",*origin="http://192.168.0.111",*token="0123456789abcdef0123456789abcdef";
@@ -144,7 +144,7 @@ void resetFixture(){
 }
 extern "C" unsigned apiCase(unsigned scenario){
  resetFixture();unsigned expected=0;bool allowBody=false;
- if(scenario==1){web.host="WIFI-CLOCK-ABCDEF:80";web.origin="http://wifi-clock-abcdef";}
+ if(scenario==1){web.host="WIFI-CLOCK-321A86:80";web.origin="http://wifi-clock-321a86";}
  if(scenario==2){web.host="192.168.4.1";web.origin="http://192.168.4.1";WiFi.link=0;}
  if(scenario==3){web.host="attacker.example";web.origin="http://attacker.example";expected=403;}
  if(scenario==4){web.origin="http://attacker.example";expected=403;}
@@ -171,7 +171,7 @@ extern "C" unsigned apiCase(unsigned scenario){
  if(scenario==17){
   networkState=NetworkState::Offline;keepWebSessionAlive();return web.code==503?0:7;
  }
- return deviceHostname()=="WiFi-Clock-ABCDEF" && deviceSetupName()=="WiFi-Clock-Setup"?0:8;
+ return deviceHostname()=="WiFi-Clock-321A86" && deviceSetupName()=="WiFi-Clock-Setup"?0:8;
 }
 extern "C" unsigned refreshCloseCase(){
  resetFixture();keepWebSessionAlive();nowMs=1000;closeWebSession();

@@ -41,13 +41,13 @@
     <select id="networks"><option value="">Select a network</option><option value="manual">Enter manually / hidden SSID</option></select>
     <div id="ssidRow" class="hidden"><label for="ssid">Manually enter Network name (SSID)</label><input id="ssid" maxlength="32" autocomplete="off" placeholder="Enter a Wi-Fi network name"></div>
     <label for="password">Wi-Fi password</label>
-    <input id="password" type="password" maxlength="63" autocomplete="current-password" placeholder="Leave blank for open Wi-Fi">
+    <input id="password" type="password" maxlength="64" autocomplete="current-password" placeholder="Leave blank for open Wi-Fi">
     </section>
     <section class="settingsGroup" aria-labelledby="timeHeading">
     <h2 id="timeHeading">Time</h2>
     <label for="timezonePreset">Timezone<select id="timezonePreset"></select></label>
     <label for="dstMode">Daylight saving<select id="dstMode"><option value="automatic">Automatic</option><option value="disabled">Disabled</option><option value="custom">Custom rule</option></select></label>
-    <div id="customTimezoneRow" class="hidden"><label for="customTimezone">Custom POSIX rule</label><input id="customTimezone" maxlength="64" autocomplete="off" placeholder="GMT0BST,M3.5.0/1,M10.5.0/2"></div>
+    <div id="customTimezoneRow" class="hidden"><label for="customTimezone">Custom POSIX rule</label><input id="customTimezone" maxlength="96" autocomplete="off" placeholder="GMT0BST,M3.5.0/1,M10.5.0/2"></div>
     <p id="nextDst" class="small help hidden" aria-live="polite"></p>
     <label for="syncTime">Daily update time<input id="syncTime" type="time" step="60" value="10:00" required></label>
     </section>
@@ -72,7 +72,7 @@
     <p id="notice" class="notice" role="status" aria-live="polite"></p>
     <details class="resetOptions" id="resetOptions"><summary>Reset settings</summary><p class="small">Erase saved settings and return to Wi-Fi setup.</p><button class="danger" id="factoryReset">Erase settings</button></details>
   </section>
-  <p class="small firmwareVersion"><a id="projectLink" href="https://github.com/maddenste/Chouchin-899-latest-revision" target="_blank" rel="noopener noreferrer"><span id="firmwareVersion">WiFi Clock v1.5</span> — Modified by Steve Madden · 2026</a></p>
+  <p class="small firmwareVersion"><a id="projectLink" href="https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285" target="_blank" rel="noopener noreferrer"><span id="firmwareVersion">WiFi Clock v1.5</span> — Modified by Steve Madden · 2026</a></p>
 
   <script>
     const $ = id => document.getElementById(id);
@@ -447,7 +447,7 @@
       }
       for (const id of ['ntpHost', 'ntpBackupHost']) {
         const host = $(id).value.trim();
-        if (host && (host.length > 127 || !/^[A-Za-z0-9-][A-Za-z0-9.-]*$/.test(host) || host.endsWith('.'))) {
+        if (host && (host.length > 127 || !/^[A-Za-z0-9-][A-Za-z0-9.-]*$/.test(host))) {
           notice('Enter a hostname or IPv4 address for the ' + (id === 'ntpHost' ? 'primary' : 'secondary') + ' NTP server, without spaces, a URL or a port.', 'bad');
           $(id).focus();
           return;

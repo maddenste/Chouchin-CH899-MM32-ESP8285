@@ -37,7 +37,7 @@ const token = '0123456789abcdef0123456789abcdef';
       }
       data = {saved:true,reset:true};
     } else if (url.pathname === '/api/v1/config') data = config;
-    else if (url.pathname === '/api/v1/status') data = {mode:statusMode,ip:statusMode === 'station' ? '192.168.0.123' : '192.168.4.1',firmwareVersion:'WiFi Clock v1.5',buildId:'TXW813 HC32-V15 R17',hostname:'WiFi-Clock-ABCDEF',connected:statusConnected,timeSynced:statusSynced,timezone:'GMT0BST,M3.5.0/1,M10.5.0/2',nextDst:statusSynced ? {utc:1792890000,before:60,after:0} : null};
+    else if (url.pathname === '/api/v1/status') data = {mode:statusMode,ip:statusMode === 'station' ? '192.168.0.123' : '192.168.4.1',firmwareVersion:'WiFi Clock v1.5',buildId:'ESP8285 MM32 v1.5 R13 20261024',hostname:'WiFi-Clock-ABCDEF',connected:statusConnected,timeSynced:statusSynced,timezone:'GMT0BST,M3.5.0/1,M10.5.0/2',nextDst:statusSynced ? {utc:1792890000,before:60,after:0} : null};
     else if (url.pathname === '/api/v1/scan') {
       if (scanFails) return route.fulfill({status:503,body:'Scan unavailable'});
       data = {scanning:false,networks:[
@@ -84,9 +84,9 @@ const token = '0123456789abcdef0123456789abcdef';
     }
   }
   await load();
-  await page.waitForFunction(() => document.getElementById('firmwareVersion').title === 'TXW813 HC32-V15 R17');
+  await page.waitForFunction(() => document.getElementById('firmwareVersion').title === 'ESP8285 MM32 v1.5 R13 20261024');
   assert.equal(await page.locator('#firmwareVersion').textContent(),'WiFi Clock v1.5');
-  assert.equal(await page.locator('#projectLink').getAttribute('href'),'https://github.com/maddenste/Chouchin-899-latest-revision');
+  assert.equal(await page.locator('#projectLink').getAttribute('href'),'https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285');
   assert.equal(await page.locator('#projectLink').textContent(),'WiFi Clock v1.5 — Modified by Steve Madden · 2026');
   const footerColour = await page.locator('.firmwareVersion').evaluate(el => getComputedStyle(el).color);
   const linkColour = () => page.locator('#projectLink').evaluate(el => getComputedStyle(el).color);
@@ -235,6 +235,23 @@ const token = '0123456789abcdef0123456789abcdef';
     assert.equal(posts.filter(p=>p.path==='/api/v1/config').length,before);
   }
   config = {...config,ntpHost:'primary.example.net',ntpBackupHost:'192.168.0.2'};
+  await load();
+  const longRule = 'ABCDEFGHIJ-1:00:00KLMNOPQRST-2:00:00,M10.4.5/13:00:00,M10.4.6/13:00:00';
+  assert.ok(longRule.length > 64 && longRule.length <= 96);
+  assert.equal(await page.locator('#password').getAttribute('maxlength'),'64');
+  assert.equal(await page.locator('#customTimezone').getAttribute('maxlength'),'96');
+  await page.selectOption('#dstMode','custom');
+  await page.fill('#customTimezone',longRule);
+  await page.fill('#password','a'.repeat(64));
+  await page.fill('#ntpHost','pool.ntp.org.');
+  await page.fill('#ntpBackupHost','backup.example.net.');
+  await page.click('#sendTime');
+  await page.waitForFunction(() => document.getElementById('sendTime').disabled);
+  const expanded = posts.filter(p=>p.path==='/api/v1/config').at(-1).body;
+  assert.equal(expanded.password,'a'.repeat(64));
+  assert.equal(expanded.timezone,longRule);
+  assert.equal(expanded.ntpHost,'pool.ntp.org.');
+  assert.equal(expanded.ntpBackupHost,'backup.example.net.');
   await load();
   assert.equal(await page.locator('#ntpHost').inputValue(),'primary.example.net');
   assert.equal(await page.locator('#ntpBackupHost').inputValue(),'192.168.0.2');

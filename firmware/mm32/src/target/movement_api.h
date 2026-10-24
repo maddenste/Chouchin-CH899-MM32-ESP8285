@@ -47,7 +47,6 @@ uint32_t rtc_counter_pause(void);
 uint32_t rtc_motion_stamp(void);
 uint32_t rtc_event_stamp(const Mm32UartEvent *event);
 uint32_t rtc_event_advance(Mm32UartEvent *event, uint32_t seconds);
-uint32_t rtc_event_align_seconds(Mm32UartEvent *event, uint32_t second);
 
 void parallel_uart_settings(const Mm32UartEvent *event);
 void uart_probe_rx_reset(void);

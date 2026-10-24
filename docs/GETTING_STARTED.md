@@ -1,6 +1,6 @@
 # Install WiFi Clock v1.5
 
-**Not ready for general installation yet.** The firmware is still being tested. Wait for the ready-to-install files listed on the [downloads page](DOWNLOADS.md) before following these steps.
+Download the matched **MM32 RC6BC + ESP R13** files from [downloads](DOWNLOADS.md), then follow the instructions below.
 
 ## Before you start
 
@@ -22,9 +22,9 @@ Installation replaces firmware on **both chips**. Keep any original backups you 
 
 ## 2. Get the correct firmware
 
-When a release is available, download its **MM32 HEX** and **ESP BIN** together, plus any supplied programming project and checksum file. Follow the [downloads page](DOWNLOADS.md); files from the other CH899 projects are not substitutes.
+Download the release's **MM32 HEX** and **ESP BIN** together, plus any supplied programming project and checksum file. Follow the [downloads page](DOWNLOADS.md); files from the other CH899 projects are not substitutes.
 
-Ready-made files will be intended for installation without editing or compiling. The source-build instructions are separate for developers.
+The prepared files are intended for installation without editing or compiling. The source-build instructions are separate for developers.
 
 ## 3. Program the two chips
 

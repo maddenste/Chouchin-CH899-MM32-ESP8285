@@ -1,23 +1,16 @@
-# Downloads and release status
+# Firmware downloads
 
-**WiFi Clock v1.5 is still being tested. There is no ready-to-install release yet.**
+Install **WiFi Clock v1.5** using the matched **MM32 RC6BC + ESP R13** files.
 
-The public repository currently provides source code and documentation. Please wait for a tested release before upgrading a clock for everyday use. The remaining work includes overnight operation, daily time updates and consistently even seconds-hand movement.
+| Download | Use |
+| --- | --- |
+| [MM32 HEX](https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285/releases/download/v1.5/MM32SPIN05PF_DEADLINE_GUARD_RC6BC_20261024.hex) | Movement controller |
+| [ESP BIN](https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285/releases/download/v1.5/Chouchin-899-MM32-ESP-v1.5-R13-20261024.bin) | Wi-Fi/settings application |
+| [MM32 programming project ZIP](https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285/releases/download/v1.5/WiFi-Clock-v1.5-MM32-Programmer.zip) | Extract together; contains the matching HEX in its build folder |
+| [SHA256SUMS.txt](https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285/releases/download/v1.5/SHA256SUMS.txt) | Check downloaded file identities |
 
-## When a release is available
+[Release notes and all assets](https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285/releases/tag/v1.5).
 
-The [Releases page](https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285/releases) will provide the files to install together:
+Check [board compatibility](HARDWARE.md), then follow [getting started](GETTING_STARTED.md). No source editing or compiling is required. Use these two firmware files together; firmware for HC32/TXW813 or the original ESP-only project is not interchangeable.
 
-- **MM32 HEX** — firmware for the movement controller.
-- **ESP BIN** — firmware for Wi-Fi and the settings page.
-- The matching programming project/instructions and checksum list.
-
-Use files from the same release. Do not mix these with the original ESP-only project or the HC32/TXW813 version.
-
-Start with [board identification](HARDWARE.md), then [the installation overview](GETTING_STARTED.md). A released download is intended to be installed without editing or compiling source code.
-
-## Already testing a candidate?
-
-The current candidates are **MM32 RC6BB + ESP v1.5 R12**. Include those identifiers, or the filenames you installed, when asking for help. They are not a stable-release recommendation.
-
-Developers can find exact build filenames, checksums and test evidence in [the technical release record](development/RELEASE_IDENTITY.md).
+Developers can use the source attached to the release or the tagged repository. Exact build identifiers and hashes are in [the build record](development/RELEASE_IDENTITY.md). [Test evidence](development/TESTING.md) distinguishes completed checks from the uncompleted overnight/DST qualification.

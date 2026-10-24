@@ -1,6 +1,6 @@
 # Install the ESP Wi-Fi firmware
 
-**Wait for the ready-to-install release.** Check [release status](DOWNLOADS.md) before programming. Use the ESP BIN supplied with the same release as the MM32 HEX.
+Use the **ESP R13** BIN from [downloads](DOWNLOADS.md), together with MM32 RC6BC.
 
 ## What you need
 
@@ -53,7 +53,7 @@ Find your adapter's actual COM port in Windows. The example uses **COM4**; chang
 The current candidate's example is:
 
 ```powershell
-python -m esptool --chip esp8266 --port COM4 --baud 38400 --before no_reset --after no_reset --no-stub write_flash --flash_mode dout --flash_freq 40m --flash_size 1MB 0x0 'Chouchin-899-MM32-ESP-v1.5-R12-20261023.bin'
+python -m esptool --chip esp8266 --port COM4 --baud 38400 --before no_reset --after no_reset --no-stub write_flash --flash_mode dout --flash_freq 40m --flash_size 1MB 0x0 'Chouchin-899-MM32-ESP-v1.5-R13-20261024.bin'
 ```
 
 Use the command/file listed with the eventual release if its filename changes. The command does not put the ESP into programming mode for you; complete step 2 first.

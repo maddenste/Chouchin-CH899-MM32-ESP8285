@@ -25,19 +25,21 @@ Runtime seconds movement uses hardware PWM in all four movement combinations. St
 
 **RC6BB change:** only TIM3 CC4 commits a warm release. It accepts an up-counting compare slot within 128 timer counts of the scheduled point, inside the original safe released gap. Request and polling paths cannot independently open outputs. A late interrupt defers release rather than emitting a shortened pulse. An unpowered minute request is retained until that handover finishes; powered pulse falls are not delayed. Speed, width and ramp mathematics are unchanged from RC6BA.
 
-This removes a restart-path variation. It is **not proof that timer contention caused the reported lumpiness**. Coarse read-only output captures found nominal pulses during both smooth and lumpy observations; they could not measure analogue drive or rotor behavior. Physical endurance testing remains necessary.
+**RC6BC change:** an unpowered minute rise no longer defers the software tick; runtime checks enforce actual pending-tick/late-compare deadlines. Delayed minute starts receive their full powered width. Powered-fall protection remains and first-fault reasons distinguish scheduler failures. The source cleanup does not change the RC6BC HEX.
+
+These changes remove specific scheduling weaknesses. It is **not proof that timer contention caused the reported lumpiness**. Coarse read-only output captures found nominal pulses during both smooth and lumpy observations; they could not measure analogue drive or rotor behavior. Physical endurance testing remains necessary.
 
 ## RTC discipline and corrections
 
 The MM32 can use the RTC's unused non-interrupting countdown timer as a short-window rate reference. If that reference is unavailable or repeatedly unusable, calendar-based calibration remains available. The countdown is not a stopwatch stream capable of directly clocking each PWM edge. No RTC CLKOUT wiring is required.
 
-ESP R12 retains fractional NTP time, accounts approximately for network processing/round trip, and starts TIME near a whole-second edge. MM32 captures receipt phase and ages pending records through waits. An exact TIME echo confirms record acceptance, not measured hand accuracy.
+ESP R13 retains fractional NTP time, accounts approximately for network processing/round trip, and starts TIME near a whole-second edge. MM32 captures receipt phase and ages pending records through waits. An exact TIME echo confirms record acceptance, not measured hand accuracy.
 
 Large ordinary corrections, small corrections and future DST records have distinct admission paths. Pending records do not overwrite the immutable correction already being applied. Save-triggered movement/battery-saver changes request a safe full restart, rather than live timer reconfiguration.
 
 ## Memory limits
 
-RC6BB: **31,500 / 32,768 bytes flash**. Static allocation including fixed diagnostics is **2,944 bytes**; a separate **1,152-byte stack** occupies the remainder of 4 KiB SRAM. There is no spare ordinary static-data allocation. The build's conservative stack accounting allows 1,008 bytes including an extra fault path and enforces a further 128-byte guard. These are linker/model checks, not measured maximum runtime stack usage.
+RC6BC: **31,724 / 32,768 bytes flash**. Static allocation including fixed diagnostics is **2,944 bytes**; a separate **1,152-byte stack** occupies the remainder of 4 KiB SRAM. There is no spare ordinary static-data allocation. The build's conservative stack accounting allows 1,008 bytes including an extra fault path and enforces a further 128-byte guard. These are linker/model checks, not measured maximum runtime stack usage.
 
 Reserved SRAM diagnostic words also hold functional state. They are not safe to clear wholesale while running. Register/RAM edits copied from old experiments can corrupt the current clock.
 

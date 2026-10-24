@@ -1,4 +1,4 @@
-/* Private rtc.c helpers. Exclusive experimental ownership of the unused
+/* Private rtc.c helpers. Exclusive ownership of the otherwise unused
  * countdown timer, never calendar/STOP/TEST1/CLKOUT/alarm configuration.
  * An interrupt-using timer is not taken over. */
 static uint32_t counter_open(void)
