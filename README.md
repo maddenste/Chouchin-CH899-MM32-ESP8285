@@ -27,7 +27,7 @@ The guide covers the equipment, programming both chips and connecting to Wi-Fi. 
 
 ## Built from scratch
 
-This began with an existing clock board, no circuit diagram and no access to its protected movement firmware. We started by getting the hands to move, then identified the LED and button connections, worked out how the motors find their starting positions, and traced communication with the Wi-Fi module and the separate timekeeping chip over I²C.
+This began with an existing clock board, no circuit diagram and no access to its protected movement firmware. We started by getting the hands to move, then identified the LED and button connections, worked out how the motors find their starting positions, decoded the Wi-Fi module's messages, and discovered how a separate timekeeping chip communicates over I²C.
 
 From those discoveries, we built replacement firmware for both chips. Much of the work went into keeping the seconds hand smooth through pauses, restarts and time corrections. [Read the project background →](docs/BACKGROUND.md)
 
