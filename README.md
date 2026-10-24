@@ -1,5 +1,7 @@
 # Chouchin-CH899 · WiFi Clock v1.5
 
+![Chouchin-CH899 WiFi Clock v1.5 — MM32 and ESP8285](docs/assets/wifi-clock-v1.5-banner.png)
+
 Give your clock Wi-Fi time updates, a choice of hand movements and a simple settings page on your phone.
 
 - **Sweep, Burst or Hold&Start** — including the station-clock pause at 12.
