@@ -1,5 +1,7 @@
 # CH899 · MM32 clock upgrade · v1.5
 
+<img src="docs/assets/wifi-clock-v1.5-banner.png" alt="Chouchin-CH899 WiFi Clock v1.5" width="600">
+
 **For the older clock board with “MM32” printed on its main chip.** Choose this project to add movement styles and seconds-hand battery saving. It replaces the clock's movement and Wi-Fi software.
 
 ## Other clock projects
@@ -44,8 +46,6 @@ We started with an undocumented board: getting the hands to move, finding the LE
 <img src="docs/screenshots/setup-desktop.png" alt="WiFi Clock v1.5 settings page" width="700">
 
 </details>
-
-<img src="docs/assets/wifi-clock-v1.5-banner.png" alt="Chouchin-CH899 WiFi Clock v1.5" width="600">
 
 ---
 
