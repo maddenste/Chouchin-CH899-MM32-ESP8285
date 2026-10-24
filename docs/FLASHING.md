@@ -1,23 +1,23 @@
-# Install the ESP Wi-Fi firmware
+# Install the Wi-Fi firmware
 
-Use the **ESP R13** BIN from [downloads](DOWNLOADS.md), together with MM32 RC6BC.
+Use **WiFi-Clock-ESP.bin** from the extracted [WiFi Clock installation package](DOWNLOADS.md). Complete [the MM32 step](MM32.md) first.
 
 ## What you need
 
 - A USB-to-serial adapter with **3.3 V signals**.
-- A Windows PC with **Python and esptool 4.5.1**, the version used for the tested procedure.
+- A Windows PC with **Python and esptool 4.5.1**, the version used by this guide.
 - Access to the ESP programming pads and the separate MM32 RESET pad.
 - A stable regulated **3.3 V board supply**, with batteries removed.
 
 This guide is for an ordinary USB-to-serial adapter. A NodeMCU used as a bridge has different printed-label conventions; do not assume its TX/RX labels have the same meaning.
 
-If needed, obtain Python from [the official Windows downloads page](https://www.python.org/downloads/windows/). With Python working in a terminal, install the esptool version used by this guide:
+If needed, obtain Python from [the official Windows downloads page](https://www.python.org/downloads/windows/). With Python working in a terminal, install esptool:
 
 ```powershell
 python -m pip install esptool==4.5.1
 ```
 
-The command installs the PC tool; it does not connect to or change your clock. The flashing command below uses the version-4 option names. Other esptool versions may need different commands.
+Use this version for the command below. Installing the PC tool does not program the clock.
 
 ## 1. Connect the serial adapter
 
@@ -46,17 +46,15 @@ If you make a separate identification or backup read before writing, reset the E
 
 ## 3. Write the BIN
 
-Check the downloaded BIN against the release's checksum list first.
+Use the BIN included in the same installation package as the MM32 firmware.
 
-Find your adapter's actual COM port in Windows. The example uses **COM4**; change it if yours is different. Run the command from the folder containing the BIN, or replace the filename with its full path.
-
-The current candidate's example is:
+Find your adapter's actual COM port in Windows. The example uses **COM4**; change it if yours is different. Open PowerShell in the extracted package folder and run:
 
 ```powershell
-python -m esptool --chip esp8266 --port COM4 --baud 38400 --before no_reset --after no_reset --no-stub write_flash --flash_mode dout --flash_freq 40m --flash_size 1MB 0x0 'Chouchin-899-MM32-ESP-v1.5-R13-20261024.bin'
+python -m esptool --chip esp8266 --port COM4 --baud 38400 --before no_reset --after no_reset --no-stub write_flash --flash_mode dout --flash_freq 40m --flash_size 1MB 0x0 'WiFi-Clock-ESP.bin'
 ```
 
-Use the command/file listed with the eventual release if its filename changes. The command does not put the ESP into programming mode for you; complete step 2 first.
+Complete the programming-mode steps above before running the command. Leave the MM32 RESET connection grounded until the transfer finishes.
 
 Wait for the transfer to finish successfully. If it fails, stop and check the wiring, COM port, power and boot sequence. Do not add a full-chip erase as a routine fix: that erases saved settings.
 

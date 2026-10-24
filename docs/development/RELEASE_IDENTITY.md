@@ -21,3 +21,7 @@ RC6BC retains the seconds waveform and corrects minute-scheduler deadline handli
 The source packages were rebuilt and compared with these identities. Repository-specific results are in [REPOSITORY_CHECKS.md](REPOSITORY_CHECKS.md). Binaries and private board captures are not committed to Git; prepared installation files and checksums are release assets.
 
 The owner reports consistently smooth seconds movement. Read-only daytime samples recorded no fault or PWM rebuild. **A completed overnight parking/06:00 resume, live DST transition or 24–48-hour endurance pass is not claimed.** See [testing](TESTING.md).
+
+## Installation package
+
+The end-user download is `WiFi-Clock-v1.5.zip`. Inside it, `firmware/WiFi-Clock-MM32.hex` and `WiFi-Clock-ESP.bin` are byte-identical to the build-named files above. `Install-MM32.uvprojx` selects the included HEX under `firmware`; it does not require users to assemble a build folder. The tag and original individual downloads remain unchanged for reproducibility. Documentation and packaging updates are on the main branch.

@@ -20,15 +20,15 @@ This v1.5 project replaces **both** applications on the tested MM32/ESP8285 boar
 
 ## Ready to install?
 
-Download **[MM32 RC6BC HEX](https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285/releases/download/v1.5/MM32SPIN05PF_DEADLINE_GUARD_RC6BC_20261024.hex)** for the **movement controller** and **[ESP R13 BIN](https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285/releases/download/v1.5/Chouchin-899-MM32-ESP-v1.5-R13-20261024.bin)** for the **Wi-Fi chip**.
+**[Download WiFi Clock v1.5](https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285/releases/download/v1.5/WiFi-Clock-v1.5.zip)** — one ZIP containing both firmware files and the MM32 programming project.
 
-These are the two firmware files needed. Also download the **[MM32 programming project](https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285/releases/download/v1.5/WiFi-Clock-v1.5-MM32-Programmer.zip)** and keep its HEX in the supplied `build` folder.
+Extract the complete ZIP to a folder on your PC, then follow the installation guide. Open **Install-MM32.uvprojx** when you reach the MM32 programming step; the firmware is already included and selected.
 
 If you experience a bug or unexpected behaviour, please [let me know through GitHub Issues](https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285/issues). Include firmware versions, settings and what happened; for a stopped clock, note hand positions and LED behaviour.
 
 **[Start here: equipment, software and flashing steps →](docs/GETTING_STARTED.md)**
 
-No compiling or firmware editing is required. Install the two prepared files, then enter your Wi-Fi settings. No extra components or board modifications are needed.
+Install the movement and Wi-Fi firmware, then enter your Wi-Fi settings. No compiling, firmware editing, extra components or board modifications are needed.
 
 **Flashing instructions for both chips:** follow the [MM32 programming guide](docs/MM32.md) and [ESP Wi-Fi flashing guide](docs/FLASHING.md). MM32 uses SWD/µVision; ESP uses a 3.3 V USB-to-serial adapter. These are different procedures.
 

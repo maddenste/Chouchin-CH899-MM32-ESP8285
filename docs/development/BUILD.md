@@ -16,7 +16,7 @@ From the repository root, specify your actual compiler location:
 
 The script compiles Cortex-M0 Thumb GNU C11 at `-Os -Wall -Wextra -Werror`, links the supplied startup, application, UART, RTC and motor code, enforces the stack reservation, then exports Intel HEX using `fromelf.exe` beside armclang. Artifacts are in `firmware/mm32/build/` and are ignored by Git. It does not invoke a programmer.
 
-The default compiler path in this retained candidate script reflects the development PC; use the parameter elsewhere. The µVision project is provided for programming the matching built HEX, not as an independently maintained second application build recipe.
+The default compiler path in this build script reflects the development PC; use the parameter elsewhere. The µVision project is provided for programming the matching built HEX, not as an independently maintained second application build recipe.
 
 ## ESP8285
 
@@ -35,3 +35,7 @@ Edit the HTML and regenerate `web_ui.h` rather than editing that header directly
 `python tools/verify_repository.py` performs dependency-free documentation/source-manifest checks. Follow [TESTING.md](TESTING.md) for compiled ARM model and mocked-browser tests. Those tests are not a physical motor/radio emulator.
 
 Windows PowerShell may restrict unsigned scripts on a network share. Review the scripts and apply your organization's approved execution policy; no permanent machine-wide policy change is required by the project.
+
+## Package the installer
+
+After both builds, run `python tools/package_release.py`. It verifies the pinned v1.5 firmware identities and creates `output/release/WiFi-Clock-v1.5.zip`. The package gives the unchanged binaries user-facing filenames, includes a preconfigured `Install-MM32.uvprojx` and links to the installation guides. The original developer project and build outputs keep their exact build identifiers.

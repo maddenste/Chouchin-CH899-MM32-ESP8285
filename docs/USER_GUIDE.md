@@ -6,7 +6,7 @@
 2. Join the clock's **WiFi-Clock-Setup** network.
 3. Open **http://192.168.4.1/** in your browser.
 
-Alternatively, while the clock is awake, stay on your home network and open the clock's IP address shown in your router. It appears as **WiFi-Clock-** followed by six letters/numbers. There is no guaranteed `.local` address.
+Alternatively, while the clock is awake, stay on your home network and open the clock's IP address shown in your router. It appears as **WiFi-Clock-** followed by six letters/numbers. Use the IP address; a `.local` name is not supported.
 
 The setup network is available on every Wi-Fi wake, even after home Wi-Fi details have been saved. If your phone says the setup network has no Internet, stay connected while using the page.
 

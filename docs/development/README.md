@@ -8,7 +8,7 @@ For installation and settings, start with [the user installation guide](../GETTI
 
 - [Build the MM32 and ESP source](BUILD.md)
 - [Supported test commands and remaining release checks](TESTING.md)
-- [Current candidate identifiers and binary checksums](RELEASE_IDENTITY.md)
+- [Release build identifiers and binary checksums](RELEASE_IDENTITY.md)
 - [Repository preparation and verification results](REPOSITORY_CHECKS.md)
 
 ## Understand or change the firmware
