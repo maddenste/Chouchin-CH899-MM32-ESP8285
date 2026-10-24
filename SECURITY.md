@@ -1,9 +1,11 @@
-# Security and private data
+# Use your clock safely
 
-Use the setup AP and local HTTP page only on trusted networks. Do not expose the clock's HTTP interface to the Internet. Per-session write protections are not a user-login system; stored device settings are not a promise of encrypted-at-rest secrets.
+Use the settings page only on a trusted local network. **Do not forward it to the Internet or expose it through your router.** It is a local setup page, not a password-protected online account.
 
-Never post Wi-Fi passwords, session tokens, complete flash backups, raw private captures or per-board factory data in issues. Crop/redact screenshots before sharing. For an ordinary bug, versions, selected modes, timing, LED code and a short symptom description are usually sufficient.
+The Wi-Fi setup network is open while the clock is awake. Configure it somewhere you trust, and do not assume stored settings are encrypted.
 
-No cloud account, mDNS discovery or Internet-facing management service is required. Normal NTP/Wi-Fi operation still depends on a reachable network/time server.
+Before sharing a screenshot, check that it does not reveal your password or other private information. Never upload complete device backups, session tokens or private network captures to an issue.
 
-Report a suspected security problem privately through the maintainer's GitHub contact route where available; do not disclose secrets publicly. No response-time guarantee or formal supported-release policy is claimed during pre-release development.
+For an ordinary clock problem, use [troubleshooting](docs/TROUBLESHOOTING.md) and the issue form. Report a suspected security problem privately through the maintainer's GitHub contact route where available, rather than publishing secrets.
+
+For developers, the webpage's request checks help prevent accidental/unwanted writes but are not user authentication. Network settings, HTTP/session protections and storage limitations should be considered when proposing changes.

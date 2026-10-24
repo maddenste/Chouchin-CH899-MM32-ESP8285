@@ -1,33 +1,74 @@
-# Program the ESP8285 Wi-Fi controller
+# Install the ESP Wi-Fi firmware
 
-**Pre-release guide.** This is the ESP8285 workflow, not the TXW813 workflow. Use 3.3 V logic and the matched BIN only. Existing settings may be retained by an application-only write; do not erase flash as a routine upgrade step.
+**Wait for the ready-to-install release.** Check [release status](DOWNLOADS.md) before programming. Use the ESP BIN supplied with the same release as the MM32 HEX.
 
-## Connect
+## What you need
 
-For an ordinary USB-UART adapter: **adapter TX → clock RX**, **adapter RX → clock TX**, and **GND → G**. A NodeMCU used as a bridge has different printed-label conventions; do not apply this table to an unidentified clone. Use the [pad photograph](HARDWARE.md#programming-access).
+- A USB-to-serial adapter with **3.3 V signals**.
+- A Windows PC with **Python and esptool 4.5.1**, the version used for the tested procedure.
+- Access to the ESP programming pads and the separate MM32 RESET pad.
+- A stable regulated **3.3 V board supply**, with batteries removed.
 
-Power the board from a verified regulated 3.3 V supply with batteries removed. Do not connect the adapter's VCC/5V/3V3 power wire as a second supply. UART RX/TX must also be 3.3 V logic.
+This guide is for an ordinary USB-to-serial adapter. A NodeMCU used as a bridge has different printed-label conventions; do not assume its TX/RX labels have the same meaning.
 
-## Enter the ROM bootloader
+If needed, obtain Python from [the official Windows downloads page](https://www.python.org/downloads/windows/). With Python working in a terminal, install the esptool version used by this guide:
 
-1. Remove clock power and connect ground/serial leads.
-2. Hold the clock's **MM32 RESET pad to GND** to prevent its UART traffic from interfering. Keep it grounded throughout the ESP transfer. This is the confirmed bench setup, not the ESP's reset line.
-3. Ground ESP **IO0**, then apply power/reset to the ESP. GPIO0 must be low at the reset edge; grounding it after a normal boot is insufficient.
-4. IO0 can be released after the initial bootloader entry. It need not remain grounded throughout the transfer; MM32 RESET remains grounded.
-5. The ESP itself must be powered and released from reset to answer. Do not hold the ESP reset low or force an unidentified enable/reset signal high. MM32 reset and ESP reset are different signals.
+```powershell
+python -m pip install esptool==4.5.1
+```
 
-Close serial monitors and other programs using the adapter. The tested adapter used COM4, but use the actual COM port on your PC. If you perform separate identification/read and write operations, **re-enter the ESP bootloader between them**; the tested workflow needed an ESP reset between read and write.
+The command installs the PC tool; it does not connect to or change your clock. The flashing command below uses the version-4 option names. Other esptool versions may need different commands.
 
-## Write the application
+## 1. Connect the serial adapter
 
-The verified bench settings were **esptool 4.5.1**, **38400 baud**, **no stub**, no automatic reset before/after, DOUT / 40 MHz / 1 MB, offset **0x0**. The command below is an example for that version; replace port and file path deliberately. It does not enter the bootloader for you.
+With power removed, connect:
+
+| Adapter | Clock ESP pad |
+| --- | --- |
+| TX | RX |
+| RX | TX |
+| GND | G |
+
+Use the [pad photographs](HARDWARE.md#programming-access). Power the board separately from the regulated 3.3 V supply. **Leave the adapter's VCC/5V/3V3 power wire disconnected.** Never apply 5 V to the board or its signals.
+
+Close any serial monitor or other program using the adapter.
+
+## 2. Put the ESP into programming mode
+
+1. Hold the clock's **MM32 RESET pad to GND**. Keep this connection throughout the ESP transfer.
+2. Connect ESP **IO0 to GND**.
+3. Apply power. IO0 must be grounded when the ESP starts.
+4. You may now release IO0. **MM32 RESET stays grounded.**
+
+MM32 RESET and ESP IO0 are different pads. Do not hold the ESP itself in reset: it must be running its programming mode to answer the PC.
+
+If you make a separate identification or backup read before writing, reset the ESP back into programming mode between the read and write operations.
+
+## 3. Write the BIN
+
+Check the downloaded BIN against the release's checksum list first.
+
+Find your adapter's actual COM port in Windows. The example uses **COM4**; change it if yours is different. Run the command from the folder containing the BIN, or replace the filename with its full path.
+
+The current candidate's example is:
 
 ```powershell
 python -m esptool --chip esp8266 --port COM4 --baud 38400 --before no_reset --after no_reset --no-stub write_flash --flash_mode dout --flash_freq 40m --flash_size 1MB 0x0 'Chouchin-899-MM32-ESP-v1.5-R12-20261023.bin'
 ```
 
-Check the BIN's SHA-256 before writing. The R12 candidate is **375,776 bytes**, not a complete personal 1 MiB backup. The ROM no-stub transfer's success is not an independent full-flash readback claim. Do not add a whole-chip erase unless you intentionally want to erase saved settings and understand the recovery implications.
+Use the command/file listed with the eventual release if its filename changes. The command does not put the ESP into programming mode for you; complete step 2 first.
 
-After success, the ESP remains in the bootloader. Power off, release IO0 and the MM32 RESET-to-GND strap, disconnect programmer-driven lines and restart normally. The setup AP is **WiFi-Clock-Setup**, including on wakes with saved station credentials. See [setup](USER_GUIDE.md).
+Wait for the transfer to finish successfully. If it fails, stop and check the wiring, COM port, power and boot sequence. Do not add a full-chip erase as a routine fix: that erases saved settings.
 
-An original ESP backup restores only ESP contents. It cannot restore the original MM32 movement firmware. Keep original per-device images and credentials private; never upload them to an issue.
+## 4. Restart normally
+
+1. Remove clock power.
+2. Release ESP IO0 and the **MM32 RESET-to-GND connection**.
+3. Disconnect the adapter's driven serial leads.
+4. Restore normal clock power.
+
+The ESP stays in programming mode until restarted normally. Look for **WiFi-Clock-Setup** and follow [Wi-Fi setup](USER_GUIDE.md#open-the-settings-page).
+
+Existing settings can survive an application-only upgrade, but keep a note of your preferences. An original ESP backup restores only the Wi-Fi chip; it cannot restore the original MM32 movement firmware. Keep personal backups private.
+
+[Installation overview](GETTING_STARTED.md) · [Programming help](TROUBLESHOOTING.md#a-programmer-will-not-connect)

@@ -11,7 +11,8 @@ problems = []
 required = ('README.md', 'LICENSE', 'NOTICE.md', 'THIRD_PARTY_NOTICES.md',
             'docs/GETTING_STARTED.md', 'docs/MM32.md', 'docs/FLASHING.md',
             'docs/USER_GUIDE.md', 'docs/TROUBLESHOOTING.md',
-            'docs/RELEASE_IDENTITY.md', 'docs/TESTING.md')
+            'docs/DOWNLOADS.md', 'docs/development/README.md',
+            'docs/development/RELEASE_IDENTITY.md', 'docs/development/TESTING.md')
 for name in required:
     if not (ROOT / name).is_file():
         problems.append(f'Missing required file: {name}')
@@ -38,7 +39,9 @@ else:
             if file.is_file() and file.relative_to(ROOT).as_posix() not in recorded:
                 problems.append(f'Unrecorded firmware source: {file.relative_to(ROOT)}')
 
-docs = list(ROOT.glob('*.md')) + list((ROOT / 'docs').glob('*.md'))
+docs = (list(ROOT.glob('*.md')) + list((ROOT / 'docs').rglob('*.md')) +
+        list((ROOT / 'firmware').glob('*.md')) + list((ROOT / 'tests').glob('*.md')) +
+        list((ROOT / '.github').rglob('*.md')))
 for file in docs:
     body = file.read_text(encoding='utf-8')
     links = re.findall(r'!?\[[^\]]*\]\(([^\s)]+)(?:\s+"[^"\n]*")?\)', body)

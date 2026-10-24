@@ -1,60 +1,98 @@
-# Setup and everyday use
+# Settings and everyday use
 
-## Open settings
+## Open the settings page
 
-Hold **M.SET for about three seconds** to wake Wi-Fi. Join **WiFi-Clock-Setup** and open **http://192.168.4.1/**, or use the clock's router-assigned LAN address while it is awake. The setup AP is offered alongside the saved Wi-Fi network on every wake.
+1. Hold **M.SET for about three seconds**.
+2. Join the clock's **WiFi-Clock-Setup** network.
+3. Open **http://192.168.4.1/** in your browser.
 
-The LAN hostname is **WiFi-Clock-ABCDEF** using the final six MAC hex digits. Router display/name registration varies. **mDNS is not implemented**; a `.local` address is not promised. Use a trusted 2.4 GHz network and do not expose this HTTP page to the Internet.
+Alternatively, while the clock is awake, stay on your home network and open the clock's IP address shown in your router. It appears as **WiFi-Clock-** followed by six letters/numbers. There is no guaranteed `.local` address.
 
-<img src="screenshots/setup-mobile.png" alt="Mobile setup page with synthetic test settings" width="350">
+The setup network is available on every Wi-Fi wake, even after home Wi-Fi details have been saved. If your phone says the setup network has no Internet, stay connected while using the page.
 
-## Wi-Fi and time
+<img src="screenshots/setup-mobile.png" alt="WiFi Clock settings on a phone" width="350">
 
-Choose a Wi-Fi network or enter its name manually. A saved password is not sent back to the browser; leaving it unchanged keeps the stored secret. The clock synchronises through NTP while the ESP is awake; it does not require an always-on Wi-Fi session.
+## Wi-Fi
 
-Primary NTP defaults to **pool.ntp.org**. The secondary field defaults to **blank**; enter a backup if wanted. A good accepted response is sufficient: the firmware does not require three NTP lookups. Fractional NTP seconds are retained internally, and TIME transmission is scheduled near the start of a whole second. This improves consistency but is not a promise of laboratory accuracy or zero daily drift.
+Select your **2.4 GHz** network and enter its password. Choose manual entry if you need to type the network name yourself.
 
-Select timezone and Automatic, Disabled or Custom-rule DST. Custom input uses supported POSIX rules, not an IANA name such as `Europe/London`. Fixed offsets and `Mmonth.week.weekday[/time]` rules are supported; J/day-number rules are not. Check a custom rule against your region's actual requirements. Changing back to Automatic selects the zone's automatic rule; saving is required.
+When keeping the same network, leave the password blank to retain the saved password. The page does not display your stored password.
 
-**Daily update time** accepts any hour and minute using the browser time picker. It is local clock time, not a ten-minute interval selector. A temporary wake approximately one minute before a DST transition does not replace the saved daily time. The pending-DST record is distinguished from an ordinary manual correction; see [protocol](PROTOCOL.md).
+## Timezone and daily updates
 
-## Movement
+Select the timezone for your location. Leave daylight saving on **Automatic** for normal use; choose **Disabled** if you do not want seasonal changes.
 
-| Minute hand | Seconds hand | Behavior |
-| --- | --- | --- |
-| Gradual | Continuous | Minute hand advances in six steps per minute; seconds continue |
-| Jump | Continuous | Minute hand advances at the minute marker; seconds continue |
-| Gradual | Pause at 12 | Stop2Go seconds with gradual minute steps |
-| Jump | Pause at 12 | Hold&Start / Stop2Go seconds and minute jump |
+**Daily update time** is the local time when the clock connects to check the time. Choose any hour and minute. The clock also schedules an extra connection before a daylight-saving change; you do not need to move your daily update time for it.
 
-Stop2Go moves slightly faster for most of the minute and holds at `00`. Thus a minute step tied to civil time need not coincide with the accelerated seconds hand pointing at the corresponding dial mark. Judge timing against actual time, not the moving Stop2Go hand alone.
+### Time servers
 
-| Second-hand battery saver | Behavior |
+The default primary server is **pool.ntp.org**. Most users can leave it unchanged. The secondary server is optional and is blank by default.
+
+If you enter your own server, use its hostname or IPv4 address, without `http://`, a path or a port number.
+
+<details>
+<summary>Advanced: custom daylight-saving rules</summary>
+
+Choose **Custom rule** only if you need a rule different from the preset. The field expects a POSIX rule, not a location name such as `Europe/London`.
+
+For example, `GMT0BST,M3.5.0/1,M10.5.0/2` is an accepted rule format. Fixed offsets and rules beginning with `M` are supported; Julian/day-number forms are not. Check the dates and offsets for the location you intend to use. Press Save settings to apply a rule, or return to Automatic and save to use the selected timezone's preset.
+
+</details>
+
+## Movement style
+
+Use the **Movement style** dropdown:
+
+| Style | What you will see |
 | --- | --- |
-| Off | Selected seconds movement throughout the day |
-| Night parking | Seconds park at `00` between 00:00 and 06:00; minute/hour display continues |
-| On | Seconds remain parked, including when no seconds hand is fitted; minute/hour display continues |
+| Sweep | Seconds run continuously; the minute hand moves in small steps throughout the minute |
+| Burst | Seconds run continuously; the minute hand advances in a short burst at the minute |
+| Hold&Start | Seconds move slightly faster, pause at 12, then start again for the next minute as the minute hand advances |
 
-Scheduled-night startup completes the normal first seconds revolution before parking. The PWM timebase is preserved across ordinary holds/overnight release; powered pulses still finish safely. Permanent parking does not require launching the runtime seconds waveform.
+With Hold&Start, the seconds hand runs ahead to create the pause. Its dial position between pauses will not always match the seconds on another clock. This is expected.
 
-**Changing the movement style or second hand battery saver will restart the clock and rehome the hands after saving.** Wait for homing/catch-up to finish; the hands can take several minutes to set.
+## Second hand battery saver
 
-## Save and session ending
-
-Save persists settings and starts the confirmation flow. The ESP sends TIME, the MM32 returns the exact accepted record, and only a matching confirmation permits the Save-triggered SLEEP request. SLEEP is **ESP → MM32**, requesting early shutdown of the ESP session; it is not the ESP putting the movement controller to sleep.
-
-Refreshing/opening the page has a five-second grace to avoid immediately ending the session. Do not assume that a Save success means NTP has already completed or that the mechanical hands have finished setting. A network change can make the page unreachable; reconnect using the new network/IP or the setup AP.
-
-Large ordinary time corrections (over one minute) can safely drain movement and rehome without waiting for the end of the current seconds revolution. Small corrections and flagged DST changes use the established boundary policy. After a correction, seconds held at `00` resume on an appropriate whole-minute boundary rather than deliberately starting late. A newer update arriving during catch-up remains pending.
-
-## Buttons and LEDs
-
-| Hold about three seconds | Action |
+| Setting | What happens |
 | --- | --- |
-| M.SET | Wake ESP/settings session; does not erase settings |
-| REC | Safely park/rehome for hand alignment; normal running is locked out until restart |
-| M.SET + REC | Request saved ESP settings clear through the CLEAN exchange |
+| Off | The seconds hand follows the selected movement style all day |
+| Night parking | Seconds park at 12 from midnight until 06:00, then resume |
+| On | Seconds stay parked at 12 all day; also useful if no seconds hand is fitted |
 
-Before fitting/refitting hands, use the REC parking workflow, wait until movement has stopped at its reference, then remove power before touching hands/gears. Do not adjust hands while powered. Restore normal power afterward to home and set time again.
+The minute and hour hands continue working in every setting. If you power on during the overnight period, the seconds hand may complete its first revolution before parking.
 
-Flashing red alone means a request/session is in progress. Blue confirms a time record was received, **not** that the hands are already correct. Repeated simultaneous red/blue flash groups indicate [numbered faults](TROUBLESHOOTING.md#error-codes).
+## Save your changes
+
+Press **Save settings**. If the page reports a problem, follow its message and try again.
+
+**Changing the movement style or second hand battery saver will restart the clock and rehome the hands after saving.** Allow several minutes for the hands to find their reference positions and return to the correct time.
+
+Changing the timezone or receiving a time correction can also make the hands pause or move while they set themselves. Leave the clock to finish; a blue LED does not mean the hands have already reached the new time.
+
+After saving or leaving the page, the clock can switch Wi-Fi off to save power. The webpage may then become unavailable. Hold M.SET again when you want to reopen it. If you changed the network, reconnect using that network's new clock address or use WiFi-Clock-Setup.
+
+## Buttons
+
+Hold the buttons for about **three seconds**:
+
+| Button | Action |
+| --- | --- |
+| M.SET | Open a Wi-Fi/settings session; saved settings are kept |
+| REC | Move to the hand-fitting reference and stop normal running until the clock is restarted |
+| M.SET + REC together | Erase saved Wi-Fi and clock settings |
+
+To fit or refit the hands, use REC and wait until the movement has stopped at its reference. Remove power before touching the hands or gears. Restore power afterwards to home and set the clock again.
+
+To clear settings from the webpage instead, expand **Reset settings** and select **Erase settings**. You will need to enter your Wi-Fi details and preferences again.
+
+## LEDs
+
+| Indication | Meaning |
+| --- | --- |
+| Flashing red alone | The clock is requesting time or opening a session |
+| Blue | Time has been received; the hands may still be setting |
+| Red and blue flashing together in repeated groups | A numbered fault — count the flashes and use [the error-code guide](TROUBLESHOOTING.md#error-codes) |
+
+For connection, hand-position or movement problems, see [troubleshooting](TROUBLESHOOTING.md).
+
+Use the settings page on a trusted local network. Do not make it accessible from the Internet; see [security](../SECURITY.md).

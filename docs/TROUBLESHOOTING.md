@@ -1,39 +1,84 @@
-# Help, LEDs and error codes
+# Help and troubleshooting
 
-## Before changing anything
+## The settings page will not open
 
-Record the exact MM32/ESP versions, selected movement and parking mode, what was pressed/saved, hand positions and LED sequence. Do not enter debug or reflash before preserving a useful observation: a debugger may halt/reset the clock and lose the session.
+1. Hold **M.SET for about three seconds**.
+2. Join **WiFi-Clock-Setup** and open **http://192.168.4.1/**.
+3. If your phone warns that this network has no Internet, stay connected while using setup.
+4. To open it through your home network instead, use the clock's current IP address from your router.
 
-Flashing **red alone** is a request/session indication, not a numbered fault. **Blue** confirms TIME reception, not finished homing or correctly positioned hands. Homing/catch-up can take several minutes. With night parking selected, stationary seconds at `00` overnight are expected.
+Wi-Fi switches off between sessions to save power. A page becoming unavailable after saving or closing it is not necessarily a fault. A `.local` name is not supported.
+
+Check that your home Wi-Fi is 2.4 GHz. If you changed its name or password, use the setup network to update the clock.
+
+## The hands are moving to the wrong place or have not finished setting
+
+After power-on or a movement/battery-saver change, the hands first find their reference positions, then move to the time. This can take several minutes.
+
+Blue means time was received, **not** that the hands have finished setting. Leave the clock undisturbed while it completes the movement.
+
+If the hands finish consistently misaligned, check how they were fitted. Use the REC hand-fitting procedure in [the user guide](USER_GUIDE.md#buttons); always remove power before adjusting the hands.
+
+## Seconds stop at 12
+
+- **Hold&Start:** a short pause at 12 every minute is part of the style.
+- **Night parking:** seconds stay at 12 between midnight and 06:00.
+- **Battery saver On:** seconds stay parked all day.
+- **After a time change:** seconds may wait at 12 while the clock lines up its next minute.
+
+Check the selected settings and allow time correction to finish. If the hand does not resume when expected, note the time, selected mode and LEDs when reporting it.
+
+## Red keeps flashing
+
+The clock is still requesting time or opening a session. Check the page's Wi-Fi/time status, saved network details and time-server settings.
+
+Being able to open the page does not by itself mean the clock has received valid time. If red keeps flashing, note how long it has been doing so and whether the page says **Time synchronised**.
+
+## Movement is uneven
+
+Note whether it happens after a pause at 12, a daily update, saving settings or the hands finishing their initial setting. Also note whether the following revolution is different.
+
+Check with the programming/debug session closed. If it continues, [report it](https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285/issues). Intermittent uneven seconds movement is still part of this pre-release project's testing; it is not something to ignore before release.
 
 ## Error codes
 
-For numbered faults, **red and blue flash together N times**, then remain dark for approximately ten seconds before repeating. The following mapping was checked against RC6BB, not copied as an unchanged stock/HC32 error list.
+**Count simultaneous red-and-blue flashes**, not red-only flashes. Both LEDs flash together N times, followed by about ten seconds dark, then repeat.
 
-| Code | Plain-language meaning |
+| Flashes | Meaning |
 | --- | --- |
-| 1 | Invalid startup/restart command or attempt to reuse an already-started control session |
-| 2 | Reserved legacy debugger/command-abort indication; no ordinary button action should produce it in RC6BB |
-| 3 | Unexpected CPU exception or unhandled interrupt |
-| 4 | Minute/hour homing reference was not found within the permitted search |
-| 5 | Seconds homing/reference/alignment failed, or an authorized correction wait expired |
-| 6 | Initial valid time acquisition timed out |
-| 7 | Overall homing/catch-up movement took too long |
-| 8 | RTC access, calendar validation, setting or sampling availability failed |
-| 9 | Time/position consistency failed; includes impossible alignment/calibration-related state |
-| 10 | Motor timing, sampling, DMA, output configuration or ramp safety guard failed |
+| 1 | The clock could not start correctly |
+| 2 | Reserved for a developer abort indication; not expected during normal use |
+| 3 | An unexpected processor error occurred |
+| 4 | The minute/hour hand reference could not be found |
+| 5 | The seconds reference/alignment failed, or the clock waited too long to complete a correction |
+| 6 | The clock waited too long to receive valid time after starting |
+| 7 | The hands took too long to find their starting positions or reach the time |
+| 8 | The clock could not reliably read or set its timekeeping chip |
+| 9 | The clock's time or recorded hand position was inconsistent |
+| 10 | A motor timing or control safety check failed |
 
-There is **no battery-voltage fault code** in this replacement. A failure code is not by itself proof that a physical sensor/motor is defective.
+There is **no low-battery error code** in this firmware. A code does not automatically mean the motor or sensor is physically broken.
 
-Most faults stop movement and require reset/power-cycle after the cause is addressed. For RTC/consistency faults 8/9 in a qualified running state, the firmware may first move to its diagnostic position around **1:50:30** if coordinates can still be trusted. Unsafe electrical/sensor/timer faults do not attempt that motion. Error-6 setup recovery has a constrained path to accept a clean replacement TIME and request a reset; it is not permission to resume motors directly from a fault.
+For errors 8 or 9, the hands may first move to around **1:50:30** to show a fault. In other cases they may stop where they are. Record the code and what happened before restarting.
 
-## Common symptoms
+Most faults need a power-cycle after the cause has been addressed. Do not repeatedly erase or reflash the clock without identifying the problem. If the error returns, report it. Developers can find [the detailed fault behavior](development/ARCHITECTURE.md#fault-handling) separately.
 
-- **No setup page:** wake with M.SET, check WiFi-Clock-Setup or the current LAN IP; mDNS is absent. Check 2.4 GHz connectivity and supply. Saving a network change can close the old connection.
-- **Red continues flashing:** the ESP may be awake but MM32 has not accepted a valid TIME. Page access alone does not establish successful UART/NTP handoff. Report versions and elapsed time; do not arbitrarily change UART baud.
-- **No SWD probe / ULINK error:** verify the actual CMSIS-DAP probe, USB connection, SWD target selection, common ground and board supply. Selecting an unrelated programmer is not a firmware fix.
-- **ESP bootloader does not answer:** check actual COM port, 3.3 V logic, crossed TX/RX, common ground, boot-at-IO0-low and an ESP that is powered/out of reset. Re-enter bootloader between read and write operations.
-- **Seconds park too long after time correction:** a boundary wait may be intentional. Record current actual time, direction/size of correction and mode. Do not confuse accelerated Stop2Go dial position with civil seconds.
-- **Lumpy/undulating seconds:** record whether it starts after a hold, Save, daily wake or catch-up, and whether the next lap differs. Test without debug. Clean counters cannot establish physical smoothness; this remains part of pre-release qualification.
+## A programmer will not connect
 
-Report problems through this repository's Issues. Do not post Wi-Fi passwords, tokens, personal flash dumps, private UART captures or per-board factory data.
+For MM32, check the SWD probe, common ground, board power and that µVision is set to the probe actually connected. An error naming ULINK does not mean you have a ULINK programmer.
+
+For ESP, check the actual COM port, crossed TX/RX wiring and the IO0-at-power-on sequence. MM32 RESET must remain grounded during the ESP transfer. Re-enter the bootloader between separate read and write operations.
+
+Do not select a similar-looking chip or force an unidentified signal high. Use the [MM32](MM32.md) or [ESP](FLASHING.md) programming guide.
+
+## Ask for help
+
+[Open an issue](https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285/issues) and include:
+
+- Firmware versions, if known, or the filenames you installed.
+- Movement style and battery-saver setting.
+- What you pressed or changed just before the problem.
+- Hand positions and the LED flash count.
+- Whether a programmer/debugger was connected.
+
+A clear photo of the board or a short movement video can help. Do not include passwords, complete device backups or private network captures.

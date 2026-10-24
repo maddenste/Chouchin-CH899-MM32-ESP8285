@@ -1,19 +1,18 @@
-# Candidate history
+# What is new in v1.5?
 
-## WiFi Clock v1.5 — initial public source tree, 24 October 2026
+**WiFi Clock v1.5 is still being tested; there is no ready-to-install release yet.** Check [release status](DOWNLOADS.md) before planning an upgrade.
 
-**Candidate only: MM32 RC6BB + ESP R12. No stable binary release.**
+Compared with the earlier ESP-only project, v1.5 also replaces the movement controller's firmware, allowing:
 
-- New source-built MM32 movement application for MM32SPIN05PF hardware, paired with an ESP8285 Wi-Fi/settings application.
-- Independent homing, minute catch-up, hardware seconds PWM, optical-reference supervision and safe latched fault indication.
-- Four minute/seconds movement combinations; overnight and permanent seconds parking.
-- Existing waveform preserved through ordinary holds; safe full restart/rehome for changed movement/saver settings.
-- RC6BB makes the timer interrupt the sole owner of warm seconds release in its bounded safe phase.
-- Exact accepted TIME echo before Save-triggered SLEEP, retaining pending newer updates during catch-up.
-- Any-minute daily update, optional secondary NTP, timezone/custom POSIX and early DST wake handling.
-- Fractional NTP retained internally; TIME starts near whole-second boundaries without a new fractional wire field.
-- Matching HC32-style settings page, setup AP on every wake, DHCP hostname, no mDNS, refresh grace and local Save confirmation flow.
+- **Sweep, Burst and Hold&Start** movement styles.
+- **Night parking** for seconds between midnight and 06:00, or all-day parking.
+- A **daily update time at any hour and minute**.
+- Timezone selection, automatic daylight-saving changes and optional custom rules.
+- A local settings page with an optional secondary time server.
+- Access through **WiFi-Clock-Setup** whenever the clock's Wi-Fi is awake.
 
-Initial smooth movement and clean diagnostic observations are encouraging, not a completed endurance qualification. See [the remaining gates](TESTING.md#physical-release-gates).
+Changing movement style or second-hand battery saving restarts and sets the clock again after saving. The settings page warns you before this happens.
 
-The older [ESP-only project](https://github.com/maddenste/Chouchin-CH899-Firmware) and [HC32 project](https://github.com/maddenste/Chouchin-899-latest-revision) retain their own histories. This repository does not replace their released artifacts or claim their hardware is interchangeable.
+The initial public source tree was prepared on **24 October 2026**. Current build identifiers and technical changes are kept in [the developer release notes](development/RELEASE_IDENTITY.md).
+
+The [original ESP-only firmware](https://github.com/maddenste/Chouchin-CH899-Firmware) remains a separate option that retains the manufacturer's MM32 software. The [HC32/TXW813 version](https://github.com/maddenste/Chouchin-899-latest-revision) is for different hardware.

@@ -1,7 +1,21 @@
-# Contributing
+# Help improve the project
 
-Identify both chips and the exact matched firmware versions first. Keep changes scoped, preserve original license headers and separate build/test/flash steps. Never add device dumps, credentials, programmer executables or proprietary SDKs.
+You do not need to write code to help. Clear reports of what the clock does on real hardware are useful.
 
-For motor timing changes, preserve safe coil release, hardware ownership and stack/static-memory limits. Passing an offline model is not evidence of smooth motion on hardware. Include the supported test commands and physical observations separately.
+## Report a problem
 
-For documentation, check MM32/ESP behavior against current source rather than copying the HC32 guide unchanged. Keep end-user steps simple and developer evidence separate. Do not claim a release qualification that has not occurred.
+Start with [troubleshooting](docs/TROUBLESHOOTING.md). If the problem remains, open an issue and describe what you changed, what you expected and what happened. Include the firmware versions or filenames if known, the movement/battery-saver settings and the LED indication.
+
+Do not include passwords, device backups or private captures.
+
+## Improve the instructions
+
+If a step is confusing or does not match what you see, point to that step and explain the difference. Check that your board is MM32/ESP8285, not HC32/TXW813.
+
+## Source changes
+
+Use [the developer guide](docs/development/README.md) for builds, tests, internal hardware mapping and the protocol. Keep changes focused and retain license notices.
+
+Do not bundle vendor tools, SDKs, stock firmware or per-device data. Keep building, testing and flashing separate. Motor changes must preserve safe coil release and the memory/stack limits; model tests do not establish physical smoothness.
+
+Documentation changes should use the settings page's visible labels and explain user actions first. Do not claim a release qualification that has not occurred.
