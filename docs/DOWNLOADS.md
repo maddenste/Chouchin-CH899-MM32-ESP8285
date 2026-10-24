@@ -2,6 +2,9 @@
 
 Install **WiFi Clock v1.5** using the matched **MM32 RC6BC + ESP R13** files.
 
+> [!WARNING]
+> **Install at your own risk.** The factory MM32 movement firmware is read-protected and cannot be backed up by reading the chip. Once overwritten, it cannot be recovered from the chip. The replacement MM32 firmware was built from scratch. Testing is ongoing; please [report any bugs or unexpected behaviour](https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285/issues).
+
 | Download | Use |
 | --- | --- |
 | [MM32 HEX](https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285/releases/download/v1.5/MM32SPIN05PF_DEADLINE_GUARD_RC6BC_20261024.hex) | Movement controller |

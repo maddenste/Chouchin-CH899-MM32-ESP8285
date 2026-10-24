@@ -2,13 +2,18 @@
 
 Download the matched **MM32 RC6BC + ESP R13** files from [downloads](DOWNLOADS.md), then follow the instructions below.
 
+> [!WARNING]
+> **Install at your own risk.** The original factory MM32 movement firmware is read-protected and cannot be read out for a backup. Once overwritten, it cannot be recovered from the chip. The replacement MM32 firmware was built from scratch for this reason.
+>
+> Testing is ongoing. Please [report any bugs or unexpected behaviour](https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285/issues).
+
 ## Before you start
 
 This is an electronics upgrade, not an update uploaded through the settings page. You will need to open the movement and connect programming equipment. If you are not comfortable with that, ask someone experienced to help.
 
 Check [the board photographs](HARDWARE.md). This guide is for **MM32SPIN05PF + ESP8285** only, not HC32/TXW813.
 
-Installation replaces firmware on **both chips**. Keep any original backups you already have. A backup of the Wi-Fi chip alone will not restore the original movement firmware.
+Installation replaces firmware on **both chips**. Keep any verified ESP backups you already have, but a backup of the Wi-Fi chip alone will not restore the read-protected factory MM32 movement firmware.
 
 ## 1. Gather the equipment
 

@@ -2,6 +2,11 @@
 
 Wi-Fi time synchronisation, configurable hand movement and a simple local settings page.
 
+> [!WARNING]
+> **Install at your own risk.** The original factory MM32 movement firmware is read-protected and cannot be read out for a backup. Once you overwrite it, the original firmware cannot be recovered from the chip. This is why the replacement MM32 firmware was built from scratch.
+>
+> **Testing is ongoing.** I am continuing to test this firmware. If you find any bugs or unexpected behaviour, please [let me know through GitHub Issues](https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285/issues).
+
 **Check your board first:** this project is for **MM32SPIN05PF + ESP8285 / ESP-01F** only. For **HC32L130J8TA + TXW813-320**, use [WiFi Clock v2.0](https://github.com/maddenste/Chouchin-899-latest-revision). The firmware is not interchangeable.
 
 <img src="docs/photos/06-full-pcb-component-side.jpg" alt="Compatible Chouchin-CH899 MM32 and ESP8285 board" width="350">
