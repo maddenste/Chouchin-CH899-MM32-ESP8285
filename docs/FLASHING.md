@@ -4,12 +4,12 @@ Use **WiFi-Clock-ESP.bin** from the extracted [WiFi Clock installation package](
 
 ## What you need
 
-- A USB-to-serial adapter with **3.3 V signals**.
+- A [NodeMCU development board](https://github.com/nodemcu/nodemcu-devkit-v1.0) and USB data cable, used as a serial bridge.
 - A Windows PC with **Python and esptool 4.5.1**, the version used by this guide.
 - Access to the ESP programming pads and the separate MM32 RESET pad.
 - A stable regulated **3.3 V board supply**, with batteries removed.
 
-This guide is for an ordinary USB-to-serial adapter. A NodeMCU used as a bridge has different printed-label conventions; do not assume its TX/RX labels have the same meaning.
+The **NodeMCU bridge method worked on this clock**. It uses the NodeMCU's USB connection to program the clock; no firmware needs installing on the NodeMCU. An ordinary 3.3 V serial adapter can also be used, with the alternative wiring below.
 
 If needed, obtain Python from [the official Windows downloads page](https://www.python.org/downloads/windows/). With Python working in a terminal, install esptool:
 
@@ -19,9 +19,25 @@ python -m pip install esptool==4.5.1
 
 Use this version for the command below. Installing the PC tool does not program the clock.
 
-## 1. Connect the serial adapter
+## 1. Connect the NodeMCU bridge
 
-With power removed, connect:
+With clock power removed and the NodeMCU unplugged from USB, connect:
+
+| NodeMCU printed pin | Connect to |
+| --- | --- |
+| GND | Clock ESP pad G |
+| RX / GPIO3 | Clock ESP pad RX |
+| TX / GPIO1 | Clock ESP pad TX |
+| RST | NodeMCU's own GND |
+
+Keep **NodeMCU RST connected to its own GND** throughout programming so its onboard ESP does not interfere. This is separate from the clock's MM32 RESET connection in step 2.
+
+The RX-to-RX and TX-to-TX connections are intentional for this method: the printed labels refer to the NodeMCU's own ESP. They follow the [standard NodeMCU schematic](https://github.com/nodemcu/nodemcu-devkit-v1.0/blob/master/NODEMCU_DEVKIT_V1.0.PDF); check the wiring if using a different board or clone.
+
+<details>
+<summary>Using an ordinary USB-to-serial adapter instead?</summary>
+
+Use an adapter with **3.3 V signal levels**. Its labels refer to the adapter itself, so cross TX and RX:
 
 | Adapter | Clock ESP pad |
 | --- | --- |
@@ -29,11 +45,13 @@ With power removed, connect:
 | RX | TX |
 | GND | G |
 
-Use the [pad photographs](HARDWARE.md#programming-access). Power the board separately from the regulated 3.3 V supply. **Leave the adapter's VCC/5V/3V3 power wire disconnected.** Never apply 5 V to the board or its signals.
+</details>
+
+Use the [pad photographs](HARDWARE.md#programming-access). Power the clock separately from the regulated 3.3 V supply. **Leave NodeMCU VIN/3V3 and any adapter VCC/5V/3V3 power outputs disconnected from the clock.** Never apply 5 V to the board or its signals.
 
 Before applying clock power:
 
-1. Connect the adapter to USB. In **Device Manager → Ports (COM & LPT)**, note its COM number. Unplug and reconnect its USB cable if you need to identify which entry belongs to it.
+1. Connect the NodeMCU (or adapter) to USB. In **Device Manager → Ports (COM & LPT)**, note its COM number. Unplug and reconnect its USB cable if you need to identify which entry belongs to it.
 2. Close any serial monitor or other program using the adapter.
 3. Open the extracted package folder in File Explorer. Type **powershell** in its address bar and press Enter.
 
@@ -44,7 +62,7 @@ Before applying clock power:
 3. Apply power. IO0 must be grounded when the ESP starts.
 4. You may now release IO0. **MM32 RESET stays grounded.**
 
-MM32 RESET and ESP IO0 are different pads. Do not hold the ESP itself in reset: it must be running its programming mode to answer the PC.
+MM32 RESET and ESP IO0 are different pads. Do not hold the clock's ESP itself in reset: it must be running its programming mode to answer the PC. The NodeMCU's own RST-to-GND connection stays in place.
 
 If you make a separate identification or backup read before writing, reset the ESP back into programming mode between the read and write operations.
 
@@ -66,7 +84,7 @@ Wait for the transfer to finish successfully. If it fails, stop and check the wi
 
 1. Remove clock power.
 2. Release ESP IO0 and the **MM32 RESET-to-GND connection**.
-3. Disconnect the adapter's driven serial leads.
+3. Disconnect the NodeMCU or adapter from the clock and USB.
 4. Restore normal clock power.
 
 The ESP stays in programming mode until restarted normally. Look for **WiFi-Clock-Setup** and follow [Wi-Fi setup](USER_GUIDE.md#open-the-settings-page).

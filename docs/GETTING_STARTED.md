@@ -19,7 +19,7 @@ You will need:
 
 - A Windows PC.
 - A [CMSIS-DAP / DAPLink programmer](https://www.ebay.co.uk/itm/254327616482) for the MM32 — the programmer listing used for this project.
-- A USB-to-serial adapter with **3.3 V signals** for the ESP.
+- A [NodeMCU development board](https://github.com/nodemcu/nodemcu-devkit-v1.0) used as a USB-to-serial bridge for the ESP — the method used for this clock. A separate adapter with **3.3 V signals** is an alternative.
 - A regulated **3.3 V supply** and short connecting leads.
 - [Keil µVision](https://www.keil.com/download/product/) and the [MM32 device pack](https://www.keil.arm.com/packs/mm32spin0x_dfp-mindmotion/boards/) for the movement chip.
 - [Python](https://www.python.org/downloads/windows/) and esptool for the Wi-Fi chip. The Wi-Fi installation guide gives the command to install esptool.
