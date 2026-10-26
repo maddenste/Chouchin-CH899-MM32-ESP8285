@@ -181,7 +181,12 @@ static uint32_t time_publish(Mm32UartEvent *e, uint32_t origin)
 static __attribute__((noinline)) void pending_time_poll(void)
 {
     if (!(pending_time_meta & PENDING_TIME_VALID) || parallel_log[2] != 7u ||
-        !parallel_log[6] || daily_log[0] == 2u || daily_log[0] == 7u || daily_log[13] ||
+        !parallel_log[6] ||
+        /* An open session waiting for its first published TIME may consume
+         * a record retained during catch-up. Do not replace a published
+         * record that daily_poll has not yet frozen/processed. */
+        (daily_log[0] == 2u && uart_probe_good_time != daily_log[5]) ||
+        daily_log[0] == 7u || daily_log[13] ||
         mode_restart_state || alignment_recovery || minute_log[229] || minute_log[230])
         return;
     Mm32UartEvent e = {0};
@@ -1360,7 +1365,7 @@ int main(void)
 {
     audit_enabled = 1u;
     mode_latched = mode_restart_state = fine_mode_active = 0u;
-    parallel_log[0] = 0x4d5052a0u;
+    parallel_log[0] = 0x4d5052a1u;
     rtc_pace[1] = 62499u;
     /* Arm once after C runtime initialization, before enabling SysTick.
      * Existing ISR owns peripheral setup; abort/fault/REC cannot rearm this. */
