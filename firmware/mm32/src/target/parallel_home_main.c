@@ -1274,6 +1274,22 @@ static void daily_poll(void)
     uart_probe_poll_once();
     if (mode_restart_state)
         return;
+    /* Receipt and mechanical application are separate. During hand setting
+     * a fresh, validated TIME is already safe in the deferred mailbox and
+     * has been echoed. Finish acquisition now; preserve the mailbox and its
+     * receipt epoch for promotion after catch-up. A live webpage retains
+     * the normal radio lease through radio_off's existing guard.
+     * Never finish an in-flight RTC correction or use an older session's
+     * retained record as evidence that this wake has succeeded. */
+    if (parallel_log[6] && parallel_log[2] != 7u && !daily_log[13] &&
+        !buttons[9] && !buttons[10] &&
+        (pending_time_meta & PENDING_TIME_VALID) && esp_time_received &&
+        uart_probe_good_time == daily_log[5] &&
+        (int32_t)(pending_time_tick - daily_log[4]) >= -2)
+    {
+        daily_finish(3u, now);
+        return;
+    }
     if (uart_probe_good_time != daily_log[5])
     {
         Mm32UartEvent e = uart_probe_time_event;
@@ -1365,7 +1381,7 @@ int main(void)
 {
     audit_enabled = 1u;
     mode_latched = mode_restart_state = fine_mode_active = 0u;
-    parallel_log[0] = 0x4d5052a1u;
+    parallel_log[0] = 0x4d5052a2u;
     rtc_pace[1] = 62499u;
     /* Arm once after C runtime initialization, before enabling SysTick.
      * Existing ISR owns peripheral setup; abort/fault/REC cannot rearm this. */
