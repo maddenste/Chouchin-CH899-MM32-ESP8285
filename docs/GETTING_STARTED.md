@@ -5,6 +5,8 @@ This guide takes you from checking your clock to opening its settings page. You 
 > [!WARNING]
 > **Install at your own risk.** The original factory MM32 movement firmware is read-protected and cannot be read out for a backup. Once overwritten, it cannot be recovered from the chip. This replacement firmware was built from scratch.
 
+**Updating from v1.5?** Program only the MM32 movement controller using [the movement-firmware guide](MM32.md). Keep the existing ESP R13 firmware and saved Wi-Fi settings. Then restart the clock normally. The steps below cover a first installation.
+
 You will need to open the clock and connect programming equipment. The instructions below use Windows; no code editing or compiling is needed.
 
 ## 1. Check your board
@@ -13,15 +15,15 @@ CH899 clocks were made with different circuit boards. [Compare yours with the ph
 
 ## 2. Download and prepare
 
-**[Download WiFi Clock v1.5](https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285/releases/download/v1.5/WiFi-Clock-v1.5.zip)** and extract the complete ZIP to a folder on your PC. Keep its files together.
+**[Download WiFi Clock v1.5](https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285/releases/download/v1.5.1/WiFi-Clock-v1.5.1.zip)** and extract the complete ZIP to a folder on your PC. Keep its files together.
 
 You will need:
 
 - A Windows PC.
-- A [CMSIS-DAP / DAPLink programmer](https://www.ebay.co.uk/itm/254327616482) for the MM32 — the programmer listing used for this project.
-- A [NodeMCU development board](https://github.com/nodemcu/nodemcu-devkit-v1.0) used as a USB-to-serial bridge for the ESP — the method used for this clock. A separate adapter with **3.3 V signals** is an alternative.
+- A [CMSIS-DAP / DAPLink programmer](https://www.ebay.co.uk/itm/254327616482) for the MM32 â€” the programmer listing used for this project.
+- A [NodeMCU development board](https://github.com/nodemcu/nodemcu-devkit-v1.0) used as a USB-to-serial bridge for the ESP â€” the method used for this clock. A separate adapter with **3.3 V signals** is an alternative.
 - A regulated **3.3 V supply** and short connecting leads.
-- [Keil µVision](https://www.keil.com/download/product/) and the [MM32 device pack](https://www.keil.arm.com/packs/mm32spin0x_dfp-mindmotion/boards/) for the movement chip.
+- [Keil ÂµVision](https://www.keil.com/download/product/) and the [MM32 device pack](https://www.keil.arm.com/packs/mm32spin0x_dfp-mindmotion/boards/) for the movement chip.
 - [Python](https://www.python.org/downloads/windows/) and esptool for the Wi-Fi chip. The Wi-Fi installation guide gives the command to install esptool.
 
 Check the model and pin labels before ordering; seller listings can change. The MM32 uses the programmer's **SWD** connection; the ESP uses **serial TX/RX**.
@@ -30,8 +32,8 @@ Check the model and pin labels before ordering; seller listings can change. The 
 
 ## 3. Program both chips
 
-1. **[Install the movement firmware →](MM32.md)** using the included **Install-MM32.uvprojx** project.
-2. **[Install the Wi-Fi firmware →](FLASHING.md)** using the included **WiFi-Clock-ESP.bin** file.
+1. **[Install the movement firmware â†’](MM32.md)** using the included **Install-MM32.uvprojx** project.
+2. **[Install the Wi-Fi firmware â†’](FLASHING.md)** using the included **WiFi-Clock-ESP.bin** file.
 
 The two chips use different connections and programming procedures. Follow each guide in order. If programming or verification fails, stop and check the setup before continuing.
 
@@ -53,4 +55,4 @@ If the page is unavailable, hold **M.SET for about three seconds** and try again
 
 **Finished:** the hands show the correct time and follow your chosen movement style. Wi-Fi normally switches off to save power; hold M.SET again whenever you want to reopen the settings.
 
-Next: [settings and everyday use](USER_GUIDE.md) · [Troubleshooting](TROUBLESHOOTING.md)
+Next: [settings and everyday use](USER_GUIDE.md) Â· [Troubleshooting](TROUBLESHOOTING.md)

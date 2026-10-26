@@ -13,8 +13,8 @@ args.output.mkdir(parents=True, exist_ok=True)
 
 identities = {
     'firmware/WiFi-Clock-MM32.hex': (
-        ROOT / 'firmware/mm32/build/MM32SPIN05PF_DEADLINE_GUARD_RC6BC_20261024.hex',
-        '73AF2420F37744605B22B687398548D857226D3AC35B146E19C21117A66A40D5'),
+        ROOT / 'firmware/mm32/build/MM32SPIN05PF_SESSION_SLEEP_RC6BE_20261026.hex',
+        '45741989E1386054B5E849703E591B25A82FBC4770BEF932AB488C4B22FDBBFA'),
     'WiFi-Clock-ESP.bin': (
         ROOT / 'firmware/esp/build/Chouchin-899-MM32-ESP-v1.5-R13-20261024.bin',
         '34A11A31DE0A7231C2B32B82DBB751DF900071B09E9DB2A943FEFAB2F5640C8F'),
@@ -27,13 +27,13 @@ for name, (path, expected) in identities.items():
     files[name] = data
 
 for extension in ('uvprojx', 'uvoptx'):
-    path = ROOT / ('firmware/mm32/MM32SPIN05_DeadlineGuard_RC6BC_Programmer.' + extension)
+    path = ROOT / ('firmware/mm32/MM32SPIN05_SessionSleep_RC6BE_Programmer.' + extension)
     text = path.read_text(encoding='utf-8-sig')
     text = text.replace('<TargetName>Target_1</TargetName>',
                         '<TargetName>WiFi Clock v1.5</TargetName>')
     text = text.replace('<OutputDirectory>.\\build\\</OutputDirectory>',
                         '<OutputDirectory>.\\firmware\\</OutputDirectory>')
-    text = text.replace('MM32SPIN05PF_DEADLINE_GUARD_RC6BC_20261024.hex',
+    text = text.replace('MM32SPIN05PF_SESSION_SLEEP_RC6BE_20261026.hex',
                         'WiFi-Clock-MM32.hex')
     ET.fromstring(text)
     files['Install-MM32.' + extension] = text.encode('utf-8')
@@ -46,8 +46,13 @@ assert project.find('.//UpdateFlashBeforeDebugging').text == '0'
 assert all(ET.fromstring(files['Install-MM32.' + e]).find('.//TargetName').text
            == 'WiFi Clock v1.5' for e in ('uvprojx', 'uvoptx'))
 
-files['START-HERE.txt'] = '''WiFi Clock v1.5
+files['START-HERE.txt'] = '''WiFi Clock v1.5.1
 MM32SPIN05PF + ESP8285 / ESP-01F
+
+UPDATING FROM v1.5?
+Only update the MM32 movement controller. ESP R13 is unchanged, so skip the
+ESP flashing step if already installed. Your saved Wi-Fi settings remain on
+the ESP. After the MM32 update, disconnect programming leads and restart normally.
 
 READ BEFORE INSTALLING
 Install at your own risk. The factory MM32 movement firmware is read-protected
@@ -60,7 +65,7 @@ https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285/issues
    from inside the ZIP. All firmware files are already in the correct places.
 2. Read the installation guide before connecting your clock:
    https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285/blob/main/docs/GETTING_STARTED.md
-3. Install Keil µVision and MindMotion.MM32SPIN0x_DFP 1.0.8 separately.
+3. Install Keil ÂµVision and MindMotion.MM32SPIN0x_DFP 1.0.8 separately.
    Open Install-MM32.uvprojx, select your CMSIS-DAP programmer and SWD,
    then use Flash > Download. No compiling or file selection is needed.
    MM32 guide:
@@ -77,7 +82,7 @@ Do not connect adapter/programmer power outputs alongside the external supply.
 Never apply 5 V. Other CH899 board variants need different firmware.
 
 The firmware is ready to install; you do not need to edit or build it.
-Technical build identifiers: MM32 RC6BC / ESP R13.
+Technical build identifiers: MM32 RC6BE / ESP R13.
 Source and test evidence:
 https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285
 '''.encode('utf-8')
@@ -87,10 +92,10 @@ files['SHA256SUMS.txt'] = ''.join(
     hashlib.sha256(files[name]).hexdigest().upper() + '  ' + name + '\n'
     for name in identities).encode('ascii')
 
-archive = args.output / 'WiFi-Clock-v1.5.zip'
+archive = args.output / 'WiFi-Clock-v1.5.1.zip'
 with zipfile.ZipFile(archive, 'w', zipfile.ZIP_DEFLATED) as out:
     for name, data in files.items():
-        entry = zipfile.ZipInfo(name, (2026, 10, 24, 0, 0, 0))
+        entry = zipfile.ZipInfo(name, (2026, 10, 26, 0, 0, 0))
         entry.compress_type = zipfile.ZIP_DEFLATED
         out.writestr(entry, data)
 with zipfile.ZipFile(archive) as out:

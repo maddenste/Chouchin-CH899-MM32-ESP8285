@@ -1,4 +1,3 @@
-# Firmware source SHA-256; CRLF normalized to LF. Not binary-release hashes.
 651f629f4c5055aeb80abbf16ca33366262e1b55b5f7e2aaa788a347ea4966f3  firmware/esp/arduino/CH899_Clock/CH899_Clock.ino
 4565d38b96ffd748a2259ad876c0a990b350bd4c9a749b08a9c4c350dd41ad5b  firmware/esp/arduino/CH899_Clock/clean_reset_gate.h
 03e0665b0efe593403a1ac08069473fd68d32dbd3cad27365cb6b9c4aa576edd  firmware/esp/arduino/CH899_Clock/clock_calendar.c
@@ -26,7 +25,7 @@ e9ca656f5a4ad179e97bf72b895b3c968730254b1c30cc497712a49f6225d7b7  firmware/mm32/
 9b3f68b626a3b107405451f68427fca8fc2d5399c1ada5e5e2b9711388ed5dc3  firmware/mm32/src/target/motor_tick_guard.h
 34e9e9146c7feccef6adf3b50bc6688b1d9db5c6eb9e3ed6f6ca44f658dad3f4  firmware/mm32/src/target/movement_api.h
 65ea83bd8852314c7449e85dfb75d6aa524fc9d8a3bee9f491ba79172c97020e  firmware/mm32/src/target/parallel_buttons_rebuild.h
-19c13ad8baf8c54a8c38eadce4335c7a7d0d68813bb54a975e07c5fa1678656d  firmware/mm32/src/target/parallel_home_main.c
+f221181392e20682d2f703167060a1da360a89de0f0a15d47d598a581ff78334  firmware/mm32/src/target/parallel_home_main.c
 78a3f85caf0fe2c7404e153036af3921df0ccc4e5410fda7ad14dca6a2d5e61d  firmware/mm32/src/target/parallel_leds.c
 1e3a13b9125f3fa23dfda26ca0fb92e8a746888c96cf71cfe639b224f2afc834  firmware/mm32/src/target/parallel_minute_component.c
 bf71bfecbda53f353ef7bb81eef014802fafd7a02d9f234bfb7093f474070bdf  firmware/mm32/src/target/parallel_seconds_component.c

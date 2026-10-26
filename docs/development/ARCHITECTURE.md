@@ -39,7 +39,7 @@ Large ordinary corrections, small corrections and future DST records have distin
 
 ## Memory limits
 
-RC6BC: **31,724 / 32,768 bytes flash**. Static allocation including fixed diagnostics is **2,944 bytes**; a separate **1,152-byte stack** occupies the remainder of 4 KiB SRAM. There is no spare ordinary static-data allocation. The build's conservative stack accounting allows 1,008 bytes including an extra fault path and enforces a further 128-byte guard. These are linker/model checks, not measured maximum runtime stack usage.
+RC6BE flash usage and binary identity are recorded in [RELEASE_IDENTITY.md](RELEASE_IDENTITY.md). Static allocation including fixed diagnostics is **2,944 bytes**; a separate **1,152-byte stack** occupies the remainder of 4 KiB SRAM. There is no spare ordinary static-data allocation. The build's conservative stack accounting allows 1,008 bytes including an extra fault path and enforces a further 128-byte guard. These are linker/model checks, not measured maximum runtime stack usage.
 
 Reserved SRAM diagnostic words also hold functional state. They are not safe to clear wholesale while running. Register/RAM edits copied from old experiments can corrupt the current clock.
 

@@ -127,6 +127,15 @@ if __name__=='__main__':
     if '--handover' in sys.argv:selected=[Handover(n) for n in Handover.__dict__ if n.startswith('test_')]
     if '--deadline' in sys.argv:selected=[Deadline(n) for n in Deadline.__dict__ if n.startswith('test_')]
     if '--regression' in sys.argv:selected=baseline.cases()
+    if '--motor' in sys.argv:selected=[baseline.Tests(n) for n in (
+        'test_normal_modes_keep_original_waveforms_and_no_ramp',
+        'test_two_laps_and_normal_launch_again_after_hold',
+        'test_late_ramp_irq_does_not_change_active_pulse',
+        'test_overnight_stop_mode_resumes_with_ramp_without_second_timer_launch',
+        'test_always_parked_never_launches_seconds_during_catchup_all_styles',
+        'test_always_parked_runtime_minute_width_is_valid_without_seconds_launch',
+        'test_all_saver_transitions_in_all_styles_request_restart_without_live_change',
+        'test_saver_change_alone_finishes_one_safe_restart')]
     if '--part=1' in sys.argv:selected=selected[::2]
     if '--part=2' in sys.argv:selected=selected[1::2]
     result=unittest.TextTestRunner(verbosity=2).run(unittest.TestSuite(selected))

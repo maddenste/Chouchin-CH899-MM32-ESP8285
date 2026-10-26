@@ -1,13 +1,13 @@
-# WiFi Clock v1.5 build identity
+# WiFi Clock v1.5.1 build identity
 
-Release pair: **MM32 RC6BC + ESP R13**, 24 October 2026. [User downloads](../DOWNLOADS.md).
+Release pair: **MM32 RC6BE + unchanged ESP R13**, 26 October 2026. [User downloads](../DOWNLOADS.md).
 
 | Item | Identity |
 | --- | --- |
-| MM32 HEX | `MM32SPIN05PF_DEADLINE_GUARD_RC6BC_20261024.hex` |
-| MM32 signature | `0x4D5052A0` |
-| MM32 flash | 31,724 / 32,768 bytes |
-| MM32 HEX SHA-256 | `73AF2420F37744605B22B687398548D857226D3AC35B146E19C21117A66A40D5` |
+| MM32 HEX | `MM32SPIN05PF_SESSION_SLEEP_RC6BE_20261026.hex` |
+| MM32 signature | `0x4D5052A2` |
+| MM32 flash | 31,824 / 32,768 bytes (944 bytes free) |
+| MM32 HEX SHA-256 | `45741989E1386054B5E849703E591B25A82FBC4770BEF932AB488C4B22FDBBFA` |
 | ESP BIN | `Chouchin-899-MM32-ESP-v1.5-R13-20261024.bin` |
 | ESP displayed build | `ESP8285 MM32 v1.5 R13 20261024` |
 | ESP BIN size | 375,744 bytes |
@@ -16,12 +16,14 @@ Release pair: **MM32 RC6BC + ESP R13**, 24 October 2026. [User downloads](../DOW
 
 MM32 flash base is `0x08000000`; ESP application offset is `0x0` with the tested 1 MB override. Do not interchange the files.
 
-RC6BC retains the seconds waveform and corrects minute-scheduler deadline handling. Its cleaned source produces the identical HEX. ESP R13 changes the footer link, password/custom-rule field limits, trailing-dot NTP acceptance and displayed build ID. EEPROM format and UART/NTP/SLEEP policies are unchanged.
+RC6BE includes the deferred-TIME promotion fix from RC6BD and allows Wi-Fi acquisition to complete after safely retaining fresh TIME during hand setting. Pending time remains available afterward; M.SET/web access, active correction and REC/CLEAN ownership remain protected. Motor waveform, UART protocol and ESP application source are unchanged from v1.5. The rebuilt HEX matches the installed bench candidate exactly.
 
-The source packages were rebuilt and compared with these identities. Repository-specific results are in [REPOSITORY_CHECKS.md](REPOSITORY_CHECKS.md). Binaries and private board captures are not committed to Git; prepared installation files and checksums are release assets.
-
-The owner reports consistently smooth seconds movement. Read-only daytime samples recorded no fault or PWM rebuild. **A completed overnight parking/06:00 resume, live DST transition or 24–48-hour endurance pass is not claimed.** See [testing](TESTING.md).
+Static allocation including fixed diagnostics remains 2,944 bytes. The separate 1,152-byte stack has a conservative nested bound of 888 bytes ordinarily, or 1,008 including an additional fault handler. The build enforces a further 128-byte margin; these are static bounds rather than measured runtime maxima.
 
 ## Installation package
 
-The end-user download is `WiFi-Clock-v1.5.zip`. Inside it, `firmware/WiFi-Clock-MM32.hex` and `WiFi-Clock-ESP.bin` are byte-identical to the build-named files above. `Install-MM32.uvprojx` selects the included HEX under `firmware`; it does not require users to assemble a build folder. The tag and original individual downloads remain unchanged for reproducibility. Documentation and packaging updates are on the main branch.
+`WiFi-Clock-v1.5.1.zip` contains the firmware under friendly names: `firmware/WiFi-Clock-MM32.hex` and `WiFi-Clock-ESP.bin`. `Install-MM32.uvprojx` selects the included HEX. The identities above apply to those exact bytes. Binaries are release assets, not committed into the source tree. The v1.5 tag and assets remain available unchanged for rollback; v1.5.1 source corresponds to the new tag.
+
+## Qualification limits
+
+The development board showed the pending-session fix working during hand setting and the normal M.SET access window closing. This is not a completed RC6BE endurance qualification. An unexpected restart observed on RC6BC during a daily-wake period remains unexplained; RC6BE is not claimed to fix it. No reset recorder or motor timing experiment is included. See [TESTING.md](TESTING.md) and [REPOSITORY_CHECKS.md](REPOSITORY_CHECKS.md).

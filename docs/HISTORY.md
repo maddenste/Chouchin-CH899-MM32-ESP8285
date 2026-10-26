@@ -1,5 +1,13 @@
 # What is new in v1.5?
 
+## v1.5.1 — 26 October 2026
+
+Fixes a time update getting stuck while the hands were homing or setting, which could leave the red LED flashing and Wi-Fi awake unnecessarily. The received time is kept safely and applied when the hands are ready. The normal M.SET setup window remains available.
+
+Only the MM32 firmware changes (RC6BE). ESP R13 and the motor waveforms are unchanged. An earlier unexpected restart is still under investigation; this update is not claimed to fix it.
+
+## v1.5
+
 **WiFi Clock v1.5** is available from [downloads](DOWNLOADS.md).
 
 Compared with the earlier ESP-only project, v1.5 also replaces the movement controller's firmware, allowing:

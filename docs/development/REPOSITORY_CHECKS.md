@@ -1,26 +1,26 @@
-# Publication-tree verification — 24 October 2026
+# Publication-tree verification — v1.5.1
 
-The publication tree contains cleaned MM32 RC6BC source and ESP R13. It does not contain private RAM dumps, Wi-Fi credentials, original device backups, compiled vendor tools or firmware binaries.
+The publication tree contains MM32 RC6BE source and unchanged ESP R13. No private RAM captures, network credentials, probe identifiers, original device backups, vendor tools or firmware binaries are committed.
 
-## Identity
+## Identity and scope
 
-- MM32 source cleanup removes an unused RTC helper and redundant homing checks; rebuilt HEX is byte-identical to RC6BC.
-- ESP R13 source and canonical/generated HTML match the reviewed package.
-- Source manifest normalizes CRLF to LF for Git checkout compatibility.
-- Release SHA256SUMS records actual downloadable file bytes separately.
-- The programming project has no developer-specific probe serial binding and names the matching RC6BC HEX and disables automatic flashing when entering Debug.
-- Source, build, export and flash remain separate operations.
+- Rebuilt MM32 HEX is byte-identical to the installed bench candidate: `45741989E1386054B5E849703E591B25A82FBC4770BEF932AB488C4B22FDBBFA`.
+- The only application-source changes from v1.5 are deferred-TIME promotion, early acquisition completion during hand setting, and the signature. Motor waveform, RTC and UART-driver source are unchanged.
+- ESP R13 application source is unchanged. Its existing release BIN is hash-verified; no new ESP build, radio, browser or DST test pass is claimed for this maintenance update.
+- The source manifest normalizes CRLF to LF. Asset checksums separately identify exact download bytes.
+- The source programming project names RC6BE, has no bound probe serial, and disables automatic flashing when entering Debug. The end-user project retains the simple `Install-MM32` name and selects the bundled firmware.
+- No hardware was flashed or reset as part of publication.
 
 ## Checks
 
-Repository MM32 and ESP builds reproduced the exact release hashes. All **81 MM32 checks passed from this publication tree**: focused 12 (51.324 s), handover 5 (24.534 s), general halves 28 each (173.774 s / 173.300 s), and motor 8 (112.934 s). Three additional historical BB comparison cases passed during development; they are not included in the public suite because the old binary is not shipped.
+The current entry point is `tests/mm32/check_rc6be_session_sleep.py`. Publication results comprise 8 session checks, 4 deferred-promotion checks, 12 deadline checks, 5 handover checks, 56 inherited general checks and 8 motor checks (93 total). These use the actual RC6BE binary with modeled peripherals, not physical motor or radio simulation. Local run summaries are retained outside Git; these are not CI hardware results.
 
-ESP compiled adapters and desktop/mobile browser checks passed from this tree: 18,809 settings/HTTP/protocol/calendar cases, all 1,440 daily update choices, retained network/UART/session tests, R13 expanded input round-trip/limits, fractional NTP and whole-second send windows, 116 focused DST assertions and actual RC6BC handoffs. Some inherited console labels retain older build names; fixture imports and signature checks select the actual RC6BC image.
+The ZIP is checked for readable contents, valid project XML and exact embedded firmware hashes. Repository checks verify Markdown links, firmware source identities, the generated webpage, expected build signature, timer-owned handover and accidental private/binary files. The CI workflow runs these dependency-free checks; it does not invoke a licensed Arm compiler or contact a clock.
 
-The programming ZIP was checked for readable contents and an exact embedded HEX match. The release includes both standalone firmware files, that ZIP and a SHA256SUMS manifest. No vendor device pack or flash algorithm is redistributed.
+For historical context, v1.5's ESP R13 adapters/browser checks covered 18,809 settings/HTTP/protocol/calendar cases, all 1,440 daily time choices and 116 focused DST assertions. Those remain historical results, not new v1.5.1 runs. The ESP-to-MM32 test fixture now points to the current RC6BE image for future runs.
 
-The CI workflow checks document links, source manifest, identifiers, generated HTML and accidental private/binary files. It does not build with the licensed Arm compiler, contact a clock or certify physical smoothness.
+## Physical limits and known investigation
 
-## Physical limits
+Live RC6BE observations showed retained time surviving hand setting, successful early Wi-Fi-session completion and the ordinary M.SET access window expiring without waiting for the hands. Neither this observation nor compiled tests establish physical smoothness or endurance. Night parking, 06:00 release, a live DST transition and a completed 24–48h run on RC6BE are not claimed here.
 
-The owner reports smooth seconds. Daytime RAM captures observed progression without a fault or PWM rebuild. Night parking, 06:00 resume, this night's actual DST change and a completed 24–48h endurance run are not recorded as passes. Sparse counters cannot prove physical movement quality or exact subsecond accuracy.
+The earlier unexpected fresh startup during RC6BC's daily-wake period remains unexplained. Its original reset flags lacked a software/watchdog indication, but historical power/pin flags could not establish the latest cause. RC6BE fixes a separately reproduced session deadlock and is not presented as a cure for that restart. No reset-recorder experiment is included in this release.

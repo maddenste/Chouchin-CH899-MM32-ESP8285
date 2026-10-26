@@ -1,6 +1,8 @@
 # Download WiFi Clock v1.5
 
-**[Download the installation package](https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285/releases/download/v1.5/WiFi-Clock-v1.5.zip)**
+**[Download the installation package](https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285/releases/download/v1.5.1/WiFi-Clock-v1.5.1.zip)**
+
+**Already using v1.5?** Update only the MM32 movement controller using the included project. ESP R13 is unchanged, so you can leave the Wi-Fi chip as it is. [What changed →](HISTORY.md)
 
 Extract the complete ZIP to a folder on your PC. It contains everything needed for both chips:
 
@@ -25,6 +27,6 @@ Check [which board is inside your clock](HARDWARE.md), then follow [the installa
 
 Programming tools are installed separately; the guides show what you need. You do not need to edit or compile firmware.
 
-[Release notes and individual downloads](https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285/releases/tag/v1.5) · [Download checksums](https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285/releases/download/v1.5/SHA256SUMS.txt)
+[Release notes and individual downloads](https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285/releases/tag/v1.5.1) · [Download checksums](https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285/releases/download/v1.5.1/SHA256SUMS.txt)
 
 Developers can find the original build names, source and binary identities in [the technical release record](development/RELEASE_IDENTITY.md).

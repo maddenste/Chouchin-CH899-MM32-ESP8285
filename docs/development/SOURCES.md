@@ -20,3 +20,5 @@ A data sheet establishes possible chip capability, not a routed PCB connection. 
 Public photos are existing metadata-stripped copies. Personal originals, credentials, per-device backups and private captures remain outside the repository. See [NOTICE](../../NOTICE.md) and [third-party notices](../../THIRD_PARTY_NOTICES.md).
 
 RC6BC adds deadline-aware minute scheduling and full powered widths for delayed minute rises. R13 updates the MM32 project link and aligns webpage input limits with the existing backend. Details and evidence are in [the release record](RELEASE_IDENTITY.md).
+
+RC6BE (v1.5.1) changes only deferred-time/session ownership and completion, plus its build identity. Motor, RTC and UART-driver implementations and ESP R13 application source remain unchanged from v1.5. See [the release record](RELEASE_IDENTITY.md).
