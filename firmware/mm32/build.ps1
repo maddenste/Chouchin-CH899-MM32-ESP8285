@@ -5,7 +5,7 @@ $ErrorActionPreference = 'Stop'
 $compiler = (Resolve-Path -LiteralPath $CompilerPath -ErrorAction Stop).Path
 $artifactDir = Join-Path $PSScriptRoot 'build'
 New-Item -ItemType Directory -Path $artifactDir -Force | Out-Null
-$axf = Join-Path $artifactDir 'MM32SPIN05PF_SESSION_SLEEP_RC6BE_20261026.axf'
+$axf = Join-Path $artifactDir 'MM32SPIN05PF_WAKE_DIAGNOSTIC_RC6BF_20261028.axf'
 $hex = [System.IO.Path]::ChangeExtension($axf, '.hex')
 Push-Location (Join-Path $PSScriptRoot 'src\target')
 try {

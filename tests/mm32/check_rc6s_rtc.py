@@ -25,6 +25,8 @@ class Tests(Prior):
         for pattern in (1,2,0xa5,0xff):
             cpu=Uc(UC_ARCH_ARM,UC_MODE_THUMB|UC_MODE_MCLASS)
             cpu.mem_map(0x08000000,0x10000); cpu.mem_map(0x20000000,0x1000)
+            # RC6BF reads/acknowledges RCC_CSR before entering main.
+            cpu.mem_map(0x40021000,0x1000)
             cpu.mem_write(0x20000000,bytes([pattern])*4096)
             for start,end in flash.segments():
                 cpu.mem_write(start,bytes(flash.tobinarray(start=start,end=end-1)))
