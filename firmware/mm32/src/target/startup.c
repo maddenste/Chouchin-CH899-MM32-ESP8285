@@ -1,5 +1,4 @@
 #include <stdint.h>
-#include "reset_diagnostics.h"
 
 /* MM32SPIN05PF: 32 KiB flash at 08000000, 4 KiB SRAM at 20000000.
  * Cortex-M0 vectors from the vendor's MM32SPIN05x_q SVD. No peripherals
@@ -32,8 +31,6 @@ void DMA1_Channel2_3_Handler(void) __attribute__((weak, alias("Default_Handler")
 
 void Reset_Handler(void)
 {
-    uint32_t reset_flags = MM32_RESET_CSR;
-    uint32_t reset_reason = reset_previous_request(reset_flags);
     uint8_t *dst;
     const uint8_t *src = Load$$RW_IRAM1$$Base;
     for (dst = Image$$RW_IRAM1$$Base; dst < Image$$RW_IRAM1$$Limit; ++dst)
@@ -50,7 +47,6 @@ void Reset_Handler(void)
     {
         *dst = 0;
     }
-    reset_record_boot(reset_flags, reset_reason);
     (void)main();
     Default_Handler();
 }

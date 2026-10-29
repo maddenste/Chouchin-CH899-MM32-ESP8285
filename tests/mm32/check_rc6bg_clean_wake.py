@@ -1,4 +1,4 @@
-"""Compiled RC6BF startup/reset-cause and delayed scheduled-wake tests.
+"""Compiled RC6BG diagnostic removal and delayed scheduled-wake tests.
 
 Peripheral/reset-register models only. Never connects to a clock.
 """
@@ -10,7 +10,7 @@ from unicorn import UC_HOOK_MEM_READ, UC_HOOK_MEM_WRITE
 from unicorn.arm_const import UC_ARM_REG_SP
 import check_rc6be_session_sleep as prior
 
-IMAGE = Path(__file__).resolve().parents[2] / 'firmware/mm32/build/MM32SPIN05PF_WAKE_DIAGNOSTIC_RC6BF_20261028.axf'
+IMAGE = Path(__file__).resolve().parents[2] / 'firmware/mm32/build/MM32SPIN05PF_CLEAN_WAKE_RC6BG_20261029.axf'
 MAGIC = 0x52424631
 COOKIE = 0xa95c73e1
 CSR = 0x40021024
@@ -18,7 +18,7 @@ CSR = 0x40021024
 
 class Diagnostic(prior.SessionSleep):
     artifact = IMAGE
-    signature = 0x4d5052a3
+    signature = 0x4d5052a4
 
     def boot_to_main(self, flags, reason=0, cookie=None, magic=MAGIC):
         # Populate load-memory bytes as well as run-memory bytes for the
@@ -46,26 +46,11 @@ class Diagnostic(prior.SessionSleep):
         self.cpu.hook_del(writes)
         return [self.word('seconds_log', i) for i in range(80, 88)], state
 
-    def test_real_startup_captures_clears_and_classifies_reset_flags(self):
-        for flags, reason, cookie, magic, expected in (
-            (0x0c000000, 1, None, MAGIC, 0),       # Power reset discards cookie.
-            (0x04000000, 1, None, MAGIC, 0),       # Pin reset is not software.
-            (0x10000000, 1, None, MAGIC, 1),       # Settings restart.
-            (0x10000000, 2, None, MAGIC, 2),       # Operator CLEAN recovery.
-            (0x10000000, 1, 0, MAGIC, 0),          # Corrupt retained cookie.
-            (0x10000000, 1, None, 0, 0),          # No valid old record.
-            (0x18000000, 1, None, MAGIC, 0),       # Historical/power ambiguity.
-            (0x20000000, 2, None, MAGIC, 0),       # Watchdog, not software.
-            (0, 1, None, MAGIC, 0),                # No hardware reset flag.
-            (0x04000003, 0, None, MAGIC, 0),       # Preserve LSI control/ready.
-        ):
-            with self.subTest(flags=hex(flags), reason=reason, expected=expected):
-                self.setUp()
-                record, state = self.boot_to_main(flags, reason, cookie, magic)
-                self.assertEqual(record[:4], [MAGIC, flags, flags & 3, expected])
-                self.assertEqual(record[4:], [0, 0, 0, 0])
-                self.assertEqual(state['writes'], [flags | (1 << 24)])
-                self.assertEqual(state['csr'], flags & 3)
+    def test_real_startup_does_not_access_reset_flags_or_retain_diagnostics(self):
+        record, state = self.boot_to_main(0x0c000000, reason=1)
+        self.assertEqual(record, [0] * 8)
+        self.assertEqual(state['writes'], [])
+        self.assertEqual(state['csr'], 0x0c000000)
 
     def wake_fixture(self, style=3, hour=10, minute=0, second=0):
         self.start_pwm(style)
@@ -102,7 +87,7 @@ class Diagnostic(prior.SessionSleep):
                 self.assertEqual(self.word('minute_log', 211), 1)
                 self.assertEqual(self.word('daily_log', 1), 1)
                 self.assertEqual(self.word('daily_log', 14), due + 3)
-                self.assertEqual([self.word('seconds_log', i) for i in (84, 85)], [due, due + 3])
+                self.assertEqual([self.word('seconds_log', i) for i in range(80, 88)], [0] * 8)
                 self.assertEqual(self.word('seconds_log', 215), epoch)
                 self.assertEqual(self.frozen(), frozen)
                 self.assertFalse([(a, v) for a, v in writes if
@@ -133,7 +118,7 @@ class Diagnostic(prior.SessionSleep):
                     self.call('daily_poll')
                     self.assertEqual(self.word('minute_log', 211), 1)
                     self.assertEqual(self.word('daily_log', 1), 1)
-                    self.assertEqual(self.word('seconds_log', 85), due + delay)
+                    self.assertEqual(self.word('daily_log', 14), due + delay)
 
     def test_alignment_request_is_not_promoted_until_delayed_wake(self):
         due = self.wake_fixture()
@@ -145,7 +130,7 @@ class Diagnostic(prior.SessionSleep):
         self.assertEqual(self.word('minute_log', 204), 1)
         self.assertEqual(self.word('minute_log', 211), 1)
 
-    def test_boot_record_survives_motor_rehome_and_not_adjacent_state(self):
+    def test_rehome_clears_former_diagnostic_area(self):
         for recovery in (False, True):
             self.setUp()
             self.start_pwm()
@@ -168,17 +153,17 @@ class Diagnostic(prior.SessionSleep):
                 if self.get(2) == 1:
                     break
             self.assertEqual(self.get(2), 1)
-            self.assertEqual([self.word('seconds_log', i) for i in range(80, 88)], record)
+            self.assertEqual([self.word('seconds_log', i) for i in range(80, 88)], [0] * 8)
             self.assertEqual(self.word('seconds_log', 79), 0)
             self.assertEqual(self.word('seconds_log', 88), 0)
 
-    def test_settings_and_clean_restarts_leave_valid_reason_cookie(self):
+    def test_settings_and_clean_restarts_need_no_diagnostic_cookie(self):
         self.start_pwm()
         self.setword('minute_log', 190, 2)
         self.setword('seconds_log', 59, 0)
         self.call('mode_restart_service', 16)
         self.assertEqual(self.raw(0xe000ed0c), 0x05fa0004)
-        self.assertEqual([self.word('seconds_log', i) for i in (86, 87)], [1, 1 ^ COOKIE])
+        self.assertEqual([self.word('seconds_log', i) for i in (86, 87)], [0, 0])
         self.setUp()
         self.put(3, 6)
         self.put(2, 6)
@@ -188,7 +173,7 @@ class Diagnostic(prior.SessionSleep):
         self.cpu.mem_write(self.symbols['uart_probe_time_event'], (2026).to_bytes(2, 'little'))
         self.call('ap_recovery_poll')
         self.assertEqual(self.raw(0xe000ed0c), 0x05fa0004)
-        self.assertEqual([self.word('seconds_log', i) for i in (86, 87)], [2, 2 ^ COOKIE])
+        self.assertEqual([self.word('seconds_log', i) for i in (86, 87)], [0, 0])
 
 
 if __name__ == '__main__':

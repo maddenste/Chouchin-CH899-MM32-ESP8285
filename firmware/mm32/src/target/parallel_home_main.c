@@ -3,7 +3,6 @@
  * RC6P uses hardware seconds PWM in all runtime modes. */
 #define UART_BASE 0x40004400u
 #include "movement_api.h"
-#include "reset_diagnostics.h"
 _Static_assert(sizeof(Mm32UartEvent) == 20u, "TIME event ABI must not grow");
 #define SLEEP_IRQ_NOTE() (++seconds_log[213])
 #include "alignment_calibration.h"
@@ -699,8 +698,6 @@ static __attribute__((noinline)) uint32_t mode_restart_service(uint32_t tick)
     {
         mode_restart_state = 3u;
         __asm volatile("dsb" ::: "memory");
-        reset_note_request(MM32_RESET_SETTINGS);
-        __asm volatile("dsb" ::: "memory");
         REG32(0xe000ed0cu) = 0x05fa0004u; /* AIRCR SYSRESETREQ. */
         __asm volatile("dsb" ::: "memory");
     }
@@ -1253,16 +1250,14 @@ static void daily_poll(void)
     }
     if (daily_log[0] != 2u)
     {
-        /* Diagnostic: move only the scheduled ESP acquisition away from
-         * the civil-minute burst/seconds launch. Manual requests stay
-         * immediate. No motor phase, RTC boundary or busy wait changes. */
+        /* Keep scheduled ESP activation three seconds clear of the
+         * civil-minute motor transition. Manual requests stay immediate. */
+        const uint32_t scheduled_wake_delay = 3u;
         if (!buttons[8] && (now < daily_log[3] ||
-                           now - daily_log[3] < MM32_SCHEDULED_WAKE_DELAY))
+                           now - daily_log[3] < scheduled_wake_delay))
             return;
         if (!buttons[8])
         {
-            reset_diag[4] = daily_log[3];
-            reset_diag[5] = now;
             ++daily_log[1];
             if (alignment_pending)
                 alignment_recovery = 1u;
@@ -1390,7 +1385,7 @@ int main(void)
 {
     audit_enabled = 1u;
     mode_latched = mode_restart_state = fine_mode_active = 0u;
-    parallel_log[0] = 0x4d5052a3u;
+    parallel_log[0] = 0x4d5052a4u;
     rtc_pace[1] = 62499u;
     /* Arm once after C runtime initialization, before enabling SysTick.
      * Existing ISR owns peripheral setup; abort/fault/REC cannot rearm this. */

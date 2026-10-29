@@ -48,7 +48,7 @@
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
           <OutputDirectory>.\build\</OutputDirectory>
-          <OutputName>MM32SPIN05PF_WAKE_DIAGNOSTIC_RC6BF_20261028.hex</OutputName>
+          <OutputName>MM32SPIN05PF_CLEAN_WAKE_RC6BG_20261029.hex</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>0</CreateHexFile>

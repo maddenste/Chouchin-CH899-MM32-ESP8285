@@ -140,8 +140,7 @@ static uint32_t buttons_park_tick(uint32_t tick, uint32_t stage)
         /* Calendar sampling belongs to the continuously running RTC clock,
          * not the motor acquisition state. Preserve its trusted projection
          * and rate window through REC/alignment/backward-time rehoming. */
-        if ((i < 221u || i > 227u) &&
-            (i < MM32_RESET_DIAG_FIRST || i >= MM32_RESET_DIAG_FIRST + MM32_RESET_DIAG_WORDS))
+        if (i < 221u || i > 227u)
             seconds_log[i] = 0u;
     request_pulses = fine_pulses = dwell_fraction = minute_fine = 0u;
     second_highs = catchup_pulses = 0u;

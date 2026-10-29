@@ -58,7 +58,6 @@ static void ap_recovery_poll(void)
         uart_probe_time_event.year >= 2000u && uart_probe_time_event.year <= 2099u)
     {
         ap_recovery[0] = 3u;
-        reset_note_request(MM32_RESET_CLEAN);
         /* Fresh startup restores disabled IRQs/timers and rehomes safely.
          * Never jump directly from a latched fault into movement. */
         __asm volatile("dsb" ::: "memory");
