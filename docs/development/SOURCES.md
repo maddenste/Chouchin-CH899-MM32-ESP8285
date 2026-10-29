@@ -22,3 +22,5 @@ Public photos are existing metadata-stripped copies. Personal originals, credent
 RC6BC adds deadline-aware minute scheduling and full powered widths for delayed minute rises. R13 updates the MM32 project link and aligns webpage input limits with the existing backend. Details and evidence are in [the release record](RELEASE_IDENTITY.md).
 
 RC6BE (v1.5.1) changes only deferred-time/session ownership and completion, plus its build identity. Motor, RTC and UART-driver implementations and ESP R13 application source remain unchanged from v1.5. See [the release record](RELEASE_IDENTITY.md).
+
+RC6BG (v1.5.2) retains the three-second scheduled ESP wake delay from the RC6BF investigation and removes its temporary reset recorder and cookies. It makes no motor timing or ESP application changes.

@@ -25,7 +25,7 @@ Runtime seconds movement uses hardware PWM in all four movement combinations. St
 
 **RC6BB change:** only TIM3 CC4 commits a warm release. It accepts an up-counting compare slot within 128 timer counts of the scheduled point, inside the original safe released gap. Request and polling paths cannot independently open outputs. A late interrupt defers release rather than emitting a shortened pulse. An unpowered minute request is retained until that handover finishes; powered pulse falls are not delayed. Speed, width and ramp mathematics are unchanged from RC6BA.
 
-**RC6BC change:** an unpowered minute rise no longer defers the software tick; runtime checks enforce actual pending-tick/late-compare deadlines. Delayed minute starts receive their full powered width. Powered-fall protection remains and first-fault reasons distinguish scheduler failures. The source cleanup does not change the RC6BC HEX.
+**RC6BC change:** an unpowered minute rise no longer defers the software tick; runtime checks enforce actual pending-tick/late-compare deadlines. Delayed minute starts receive their full powered width. Powered-fall protection remains and first-fault reasons distinguish scheduler failures. The RC6BC scheduler safeguards remain in the current build.
 
 These changes remove specific scheduling weaknesses. It is **not proof that timer contention caused the reported lumpiness**. Coarse read-only output captures found nominal pulses during both smooth and lumpy observations; they could not measure analogue drive or rotor behavior. Physical endurance testing remains necessary.
 
@@ -39,7 +39,7 @@ Large ordinary corrections, small corrections and future DST records have distin
 
 ## Memory limits
 
-RC6BE flash usage and binary identity are recorded in [RELEASE_IDENTITY.md](RELEASE_IDENTITY.md). Static allocation including fixed diagnostics is **2,944 bytes**; a separate **1,152-byte stack** occupies the remainder of 4 KiB SRAM. There is no spare ordinary static-data allocation. The build's conservative stack accounting allows 1,008 bytes including an extra fault path and enforces a further 128-byte guard. These are linker/model checks, not measured maximum runtime stack usage.
+RC6BG flash usage and binary identity are recorded in [RELEASE_IDENTITY.md](RELEASE_IDENTITY.md). Static allocation including fixed diagnostics is **2,944 bytes**; a separate **1,152-byte stack** occupies the remainder of 4 KiB SRAM. There is no spare ordinary static-data allocation. The build's conservative stack accounting allows 1,008 bytes including an extra fault path and enforces a further 128-byte guard. These are linker/model checks, not measured maximum runtime stack usage.
 
 Reserved SRAM diagnostic words also hold functional state. They are not safe to clear wholesale while running. Register/RAM edits copied from old experiments can corrupt the current clock.
 
@@ -65,3 +65,7 @@ The user-facing [error-code table](../TROUBLESHOOTING.md#error-codes) retains co
 For faults 8/9, diagnostic parking around 1:50:30 is permitted only from a qualified running state with trusted coordinates. Unsafe electrical/sensor/timer faults stop without diagnostic movement. Faults override webpage leases and movement continuity.
 
 Error-6 setup recovery may accept a new valid TIME after the clean recovery exchange solely to request reset. It does not restart motor motion directly from a fault. The exact entry/lockout conditions are in `ap_recovery.h` and `uart_transport.h`.
+
+## Scheduled Wi-Fi wake
+
+RC6BG admits a scheduled ESP acquisition three seconds after the selected civil-minute stamp. Manual M.SET bypasses that delay. Motor phase, PWM lifecycle and time-correction rules are unchanged. The temporary RC6BF reset recorder and cookie handling are not included.

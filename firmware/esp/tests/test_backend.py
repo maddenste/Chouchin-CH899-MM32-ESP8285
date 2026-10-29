@@ -41,7 +41,7 @@ for mode in range(4):
     for park in range(3):
         assert call('extendedLegacyCase',mode,park)==0,(mode,park)
         cases+=1
-parser_axf=WORKSPACE/'firmware/mm32/build/MM32SPIN05PF_SESSION_SLEEP_RC6BE_20261026.axf'
+parser_axf=WORKSPACE/'firmware/mm32/build/MM32SPIN05PF_CLEAN_WAKE_RC6BG_20261029.axf'
 parser,_,parse=machine(parser_axf)
 for mode in range(4):
     for park in range(3):

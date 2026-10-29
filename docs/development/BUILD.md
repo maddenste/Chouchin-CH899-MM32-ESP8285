@@ -38,4 +38,4 @@ Windows PowerShell may restrict unsigned scripts on a network share. Review the 
 
 ## Package the installer
 
-After both builds, run `python tools/package_release.py`. It verifies the pinned v1.5.1 firmware identities and creates `output/release/WiFi-Clock-v1.5.1.zip`. The package gives the unchanged binaries user-facing filenames, includes a preconfigured `Install-MM32.uvprojx` and links to the installation guides. The original developer project and build outputs keep their exact build identifiers.
+After both builds, run `python tools/package_release.py`. It verifies the pinned v1.5.2 firmware identities and creates `output/release/WiFi-Clock-v1.5.2.zip`. The package gives the unchanged binaries user-facing filenames, includes a preconfigured `Install-MM32.uvprojx` and links to the installation guides. The original developer project and build outputs keep their exact build identifiers.
