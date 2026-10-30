@@ -1385,7 +1385,7 @@ int main(void)
 {
     audit_enabled = 1u;
     mode_latched = mode_restart_state = fine_mode_active = 0u;
-    parallel_log[0] = 0x4d5052a4u;
+    parallel_log[0] = 0x4d5052a6u;
     rtc_pace[1] = 62499u;
     /* Arm once after C runtime initialization, before enabling SysTick.
      * Existing ISR owns peripheral setup; abort/fault/REC cannot rearm this. */

@@ -19,3 +19,5 @@ Use [the developer guide](docs/development/README.md) for builds, tests, interna
 Do not bundle vendor tools, SDKs, stock firmware or per-device data. Keep building, testing and flashing separate. Motor changes must preserve safe coil release and the memory/stack limits; model tests do not establish physical smoothness.
 
 Documentation changes should use the settings page's visible labels and explain user actions first. Do not claim a release qualification that has not occurred.
+
+The maintainer will be working overseas for roughly three months from late October 2026, so replies and updates may be delayed. Please still report problems; include enough detail for later investigation.

@@ -15,7 +15,7 @@ CH899 clocks were made with different circuit boards. [Compare yours with the ph
 
 ## 2. Download and prepare
 
-**[Download WiFi Clock v1.5](https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285/releases/download/v1.5.2/WiFi-Clock-v1.5.2.zip)** and extract the complete ZIP to a folder on your PC. Keep its files together.
+**[Download WiFi Clock v1.5](https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285/releases/download/v1.5.3/WiFi-Clock-v1.5.3.zip)** and extract the complete ZIP to a folder on your PC. Keep its files together.
 
 You will need:
 

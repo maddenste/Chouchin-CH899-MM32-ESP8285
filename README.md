@@ -34,7 +34,7 @@ Follow the guide in order. It covers the equipment, downloads, programming both 
 > [!WARNING]
 > **Install at your own risk.** The factory movement software cannot be backed up or recovered from the chip after replacement. Testing is ongoing; please [report any bugs](https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285/issues).
 
-**Latest update: v1.5.2** adjusts the daily Wi-Fi wake timing and includes the earlier fix for prolonged Wi-Fi sessions while the hands set. Existing v1.5 or v1.5.1 users only need to update the movement firmware; the Wi-Fi firmware is unchanged. [Download the update →](docs/DOWNLOADS.md)
+**Latest update: v1.5.3** improves seconds-hand drive and keeps Hold&Start timing consistent as the internal clock rate changes. Existing v1.5 users only need to update the movement firmware; the Wi-Fi firmware is unchanged. [Download the update →](docs/DOWNLOADS.md)
 
 **Already installed?** [Change settings](docs/USER_GUIDE.md) · [Get help](docs/TROUBLESHOOTING.md)
 
@@ -53,4 +53,4 @@ We started with an undocumented board: getting the hands to move, finding the LE
 
 Unofficial project · Modified by Steve Madden · 2026.
 
-[Downloads and release notes](https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285/releases/tag/v1.5.2) · [Developer documentation](docs/development/README.md) · [License and credits](NOTICE.md) · [Third-party notices](THIRD_PARTY_NOTICES.md)
+[Downloads and release notes](https://github.com/maddenste/Chouchin-CH899-MM32-ESP8285/releases/tag/v1.5.3) · [Developer documentation](docs/development/README.md) · [License and credits](NOTICE.md) · [Third-party notices](THIRD_PARTY_NOTICES.md)

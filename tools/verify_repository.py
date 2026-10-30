@@ -54,8 +54,8 @@ for file in docs:
             problems.append(f'Broken local link in {file.relative_to(ROOT)}: {link}')
 
 main = (ROOT / 'firmware/mm32/src/target/parallel_home_main.c').read_text()
-if '0x4d5052a4u' not in main:
-    problems.append('MM32 source is not RC6BG')
+if '0x4d5052a6u' not in main:
+    problems.append('MM32 source is not RC6BI')
 auto = (ROOT / 'firmware/mm32/src/target/autonomous_stop2go.h').read_text()
 irq = (ROOT / 'firmware/mm32/src/target/fine_stop2go.h').read_text()
 if auto.count('pwm_try_resume();') != 0 or irq.count('pwm_try_resume();') != 1:

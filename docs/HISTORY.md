@@ -1,13 +1,21 @@
 # What is new in v1.5?
 
 
+## v1.5.3 — 30 October 2026
+
+Improves seconds-hand drive, particularly for the faster Hold&Start movement. Its timing now follows the clock's quartz reference between revolutions to account for changes in the controller's internal clock rate. Pulse timing is adjusted while the hand is parked; the running PWM waveform is retained.
+
+The test clock has run smoothly through the overnight trial and the following daily Wi-Fi wake, with no recorded restart or waveform rebuild. Longer-term testing continues; this is not a guarantee of performance on every movement or under every temperature.
+
+Includes the previous daily-wake and Wi-Fi-session fixes. **Existing v1.5 users only need to update the MM32 movement controller. ESP R13 is unchanged.** [Download and install](DOWNLOADS.md). This is the only release currently offered for installation.
+
 ## v1.5.2 — 29 October 2026
 
 Daily Wi-Fi wake now starts three seconds after the selected minute, keeping it clear of the minute's motor transition. The manual M.SET wake is still immediate. This timing completed a live daily wake without a restart; testing continues.
 
 Includes the earlier fix for Wi-Fi sessions staying active while the hands were setting. Temporary development diagnostics have been removed. Motor waveforms and ESP R13 are unchanged.
 
-**Updating from v1.5 or v1.5.1:** update only the MM32 movement controller. [Download and install](DOWNLOADS.md). This is the only release offered for installation; older versions are retained privately.
+**Updating from v1.5 or v1.5.1:** update only the MM32 movement controller. [Download and install](DOWNLOADS.md). Older installation packages are retained privately.
 
 ## v1.5.1 — 26 October 2026
 

@@ -34,9 +34,9 @@ static void pwm_dma_arm(uint32_t target)
     BT(0x0cu) = 1u << 9; /* TIM1_CC1 -> DMA1 channel 2 (vendor mapping). */
 }
 
-/* RC6V controlled test: retain the first Stop2Go lap's timer-count pair.
- * Existing homing reset clears these operational words with seconds_log.
- * RTC discipline and minute/normal-mode timing continue to update normally. */
+/* Stop2Go keeps one timing pair throughout each moving revolution.
+ * RC6BH refreshes the next pair from the filtered RTC reference only after
+ * DMA has parked the hand. Homing still clears these operational words. */
 #define pwm_fixed_period seconds_log[56]
 #define pwm_fixed_width seconds_log[57]
 /* RC6AK: reserved motor-local words, cleared on homing. No new RAM block. */
@@ -269,8 +269,9 @@ static void pwm_launch(void)
     REG32(0x48000020u) = (REG32(0x48000020u) & ~(15u << 28)) | (1u << 28);
     GPIOB_AFRL = (GPIOB_AFRL & ~15u) | 1u;
     FT(0x20u) = 0x110u; /* CH2/CH3 only; no TIM1 pin outputs. */
-    A_CRL = (A_CRL & ~(15u << 28)) | (9u << 28);
-    GPIOB_CRL = (GPIOB_CRL & ~15u) | 9u;
+    /* Vendor MM32SPIN05PF HAL: AF push-pull | GPIO_Speed_50MHz ->0xB. */
+    A_CRL = (A_CRL & ~(15u << 28)) | (11u << 28);
+    GPIOB_CRL = (GPIOB_CRL & ~15u) | 11u;
     pwm_seen = pwm_draining = second_highs = second_active = 0u;
     pwm_watch_count = 0u;
     pwm_watch_tick = parallel_log[4];
@@ -353,6 +354,31 @@ static __attribute__((noinline)) void pwm_try_resume(void)
     __asm volatile("msr primask, %0" ::"r"(mask) : "memory");
 }
 
+/* No timer writes here. The existing CC4 release/ramp installs the new
+ * pair in a gap low under both profiles, without stopping TIM3 or using UG.
+ * Retain the previous pair when the reference is unavailable/unqualified. */
+static __attribute__((noinline)) void pwm_refresh_stop_rate(void)
+{
+    if (!fine_hold_seconds || FT(0x20u) || pwm_ramp_active ||
+        pwm_resume_pending || pwm_draining || pwm_seen != 960u ||
+        pulse_diag[1] != 1u || !pulse_diag[14] || pulse_diag[13])
+        return;
+    uint32_t cycles = pulse_diag[16]; /* Already filtered, accepted HCLK*8. */
+    if (cycles < 50000u * 1024u || cycles > 75000u * 1024u || !pwm_fixed_period)
+        return;
+    uint32_t period = (uint32_t)(((uint64_t)cycles * 123u + 131072u) / 262144u);
+    uint32_t old = pwm_fixed_period, limit = old / 100u;
+    /* Bound each correction to1% so the old/new released gaps overlap.
+     * Two counts of hysteresis avoid chasing reference quantisation noise. */
+    if (period > old + limit) period = old + limit;
+    if (period + limit < old) period = old - limit;
+    if (period + 2u >= old && period <= old + 2u)
+        return;
+    pwm_fixed_period = period;
+    pwm_fixed_width = pwm_ramp_width(period);
+    pwm_ramp_normal = (period * 128u + 61u) / 123u;
+    ++seconds_log[55]; /* Existing rate-adjustment counter; no new SRAM. */
+}
 static __attribute__((noinline)) void pwm_resume_lap(void)
 {
     if (!pwm_engine || !fine_enabled || pwm_draining || pwm_resume_pending ||
@@ -368,6 +394,7 @@ static __attribute__((noinline)) void pwm_resume_lap(void)
         return;
     }
     audit_before_seconds_rise(parallel_log[4]);
+    pwm_refresh_stop_rate();
     /* Minute timing may follow fresh RTC calibration, without changing any
      * seconds PWM register or resetting the independent minute timer. */
     uint32_t cycles = (rtc_pace[1] + 1u) * 1024u + release_state[1];

@@ -41,7 +41,7 @@ for mode in range(4):
     for park in range(3):
         assert call('extendedLegacyCase',mode,park)==0,(mode,park)
         cases+=1
-parser_axf=WORKSPACE/'firmware/mm32/build/MM32SPIN05PF_CLEAN_WAKE_RC6BG_20261029.axf'
+parser_axf=WORKSPACE/'firmware/mm32/build/MM32SPIN05PF_DRIVE_TRIAL_RC6BI_20261029.axf'
 parser,_,parse=machine(parser_axf)
 for mode in range(4):
     for park in range(3):
@@ -191,6 +191,8 @@ print('PASS fractional NTP, latency/processing correction, carry/era/invalid-rep
 sys.path.insert(0,str(WORKSPACE/'tests/mm32'))
 from check_rc6bc_deadline_guard import baseline
 MM32=baseline.Tests
+MM32.artifact=parser_axf
+MM32.signature=0x4d5052a6
 MM32.setUpClass()
 assert re.search(r'constexpr uint32_t MM32_BAUD = 38400;',source)
 assert 'Serial.begin(MM32_BAUD);' in source
@@ -206,4 +208,4 @@ for style in (3,0):
     assert controller.word('minute_log',190)==(style!=3)
     transport.mem_write(0x2000e000,echoed[1:-2]+b'\0')
     assert transport_call('bridgeEcho',0x2000e000)==1,('MM32 echo -> confirmed SLEEP',style)
-print('PASS matched 38400-baud settings plus 2 compiled ESP R12 TIME -> actual RC6AY echo -> confirmed SLEEP cases, including mode restart')
+print('PASS matched 38400-baud settings plus 2 compiled ESP R13 TIME -> actual RC6BI echo -> confirmed SLEEP cases, including mode restart')

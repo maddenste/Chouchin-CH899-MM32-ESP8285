@@ -1,13 +1,13 @@
-# WiFi Clock v1.5.2 build identity
+# WiFi Clock v1.5.3 build identity
 
-Release pair: **MM32 RC6BG + unchanged ESP R13**, 29 October 2026. [User downloads](../DOWNLOADS.md).
+Release pair: **MM32 RC6BI + unchanged ESP R13**, 30 October 2026. [User downloads](../DOWNLOADS.md).
 
 | Item | Identity |
 | --- | --- |
-| MM32 build | `MM32SPIN05PF_CLEAN_WAKE_RC6BG_20261029.hex` |
-| MM32 signature | `0x4D5052A4` |
-| MM32 flash | 31,544 / 32,768 bytes; 1,224 bytes free |
-| MM32 HEX SHA-256 | `90988DAC189E34B2F7334DF86946CA497CEF3E1D2B51BA4A854F2DE01B9397B6` |
+| MM32 build | `MM32SPIN05PF_DRIVE_TRIAL_RC6BI_20261029.hex` |
+| MM32 signature | `0x4D5052A6` |
+| MM32 flash | 32,052 / 32,768 bytes; 716 bytes free |
+| MM32 HEX SHA-256 | `ABE863D0C6F65D601A3D725018F0CA60E8284A7CA9FEAB759AAAAB5F5BD3ED18` |
 | ESP build | `Chouchin-899-MM32-ESP-v1.5-R13-20261024.bin` |
 | ESP displayed build | `ESP8285 MM32 v1.5 R13 20261024` |
 | ESP BIN size | 375,744 bytes |
@@ -20,8 +20,10 @@ The installation ZIP uses friendly names: `firmware/WiFi-Clock-MM32.hex`, `WiFi-
 
 ## Scope
 
-Against RC6BE, application source differs only in the three-second scheduled ESP wake delay and build identity. M.SET wake remains immediate. RC6BF's temporary reset recorder, reset cookies and wake timestamp stores have been removed. Existing fault handling and operational counters remain. Motor, RTC and UART implementation files and ESP R13 application source are unchanged.
+The release uses the exact installed RC6BI image. Its historic internal `DRIVE_TRIAL` filename is retained for reproducible identity; end-user downloads use the friendly names above. Relative to RC6BG, it adds the RC6BH held-lap RTC rate refresh and changes PA7/PB0 runtime alternate-function push-pull MODE from 01 to 11. Homing/coarse GPIO and minute drive remain unchanged. The rate refresh is Stop2Go-only, bounded to 1% per lap with a two-count deadband and accepted-reference guards. Ordinary holds do not rebuild TIM3. See [manufacturer evidence](SOURCES.md#seconds-output-drive-evidence).
+
+No further application cleanup was made for publication: preserving the physically tested image takes precedence over cosmetic source changes. ESP R13 is unchanged.
 
 All 54 SRAM objects keep their prior addresses and sizes. Static allocation remains 2,944 bytes, including existing operational telemetry. The 1,152-byte stack has a conservative bound of 888 bytes ordinarily or 1,008 with an additional fault path. The build enforces a further 128-byte allowance. These are static bounds, not measured runtime maxima.
 
-See [testing and evidence limits](TESTING.md) and [publication checks](REPOSITORY_CHECKS.md). One successful delayed daily wake is not proof of the earlier restart's root cause or a completed endurance qualification.
+See [testing and evidence limits](TESTING.md) and [publication checks](REPOSITORY_CHECKS.md). The successful daily wake on 30 October does not establish the root cause of earlier resets or complete endurance qualification.

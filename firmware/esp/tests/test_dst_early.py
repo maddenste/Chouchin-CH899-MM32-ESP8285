@@ -1,4 +1,4 @@
-"""Focused actual calendar/ESP R12 producer -> RC6AY queue/application tests."""
+"""Focused actual calendar/ESP R13 producer -> RC6BI queue/application tests."""
 from pathlib import Path
 import datetime as dt
 import sys
@@ -10,6 +10,8 @@ transport,tsy,tx=g['machine'](p.with_name('transport_fixture.axf'))
 sys.path.insert(0,str(g['WORKSPACE']/'tests/mm32'))
 from check_rc6bc_deadline_guard import baseline
 MM32=baseline.Tests
+MM32.artifact=g['WORKSPACE']/'firmware/mm32/build/MM32SPIN05PF_DRIVE_TRIAL_RC6BI_20261029.axf'
+MM32.signature=0x4d5052a6
 MM32.setUpClass()
 def utc(s):return int(dt.datetime.fromisoformat(s).replace(tzinfo=dt.timezone.utc).timestamp())
 vectors=[
@@ -92,4 +94,4 @@ for rule in ('GMT0','IST-5:30'):
  assert call('upcomingCase',utc('2026-10-23T11:59:05'))==0
  assert call('wakeCase',utc('2026-10-23T11:59:05'),10,20)==0
  cases+=2
-print(f'PASS {cases} focused early-DST checks, including 7 actual ESP R12 TIME -> RC6AY old-boundary application cases')
+print(f'PASS {cases} focused early-DST checks, including 7 actual ESP R13 TIME -> RC6BI old-boundary application cases')

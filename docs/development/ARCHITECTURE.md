@@ -39,7 +39,7 @@ Large ordinary corrections, small corrections and future DST records have distin
 
 ## Memory limits
 
-RC6BG flash usage and binary identity are recorded in [RELEASE_IDENTITY.md](RELEASE_IDENTITY.md). Static allocation including fixed diagnostics is **2,944 bytes**; a separate **1,152-byte stack** occupies the remainder of 4 KiB SRAM. There is no spare ordinary static-data allocation. The build's conservative stack accounting allows 1,008 bytes including an extra fault path and enforces a further 128-byte guard. These are linker/model checks, not measured maximum runtime stack usage.
+RC6BI flash usage and binary identity are recorded in [RELEASE_IDENTITY.md](RELEASE_IDENTITY.md). Static allocation including fixed diagnostics is **2,944 bytes**; a separate **1,152-byte stack** occupies the remainder of 4 KiB SRAM. There is no spare ordinary static-data allocation. The build's conservative stack accounting allows 1,008 bytes including an extra fault path and enforces a further 128-byte guard. These are linker/model checks, not measured maximum runtime stack usage.
 
 Reserved SRAM diagnostic words also hold functional state. They are not safe to clear wholesale while running. Register/RAM edits copied from old experiments can corrupt the current clock.
 
@@ -69,3 +69,7 @@ Error-6 setup recovery may accept a new valid TIME after the clean recovery exch
 ## Scheduled Wi-Fi wake
 
 RC6BG admits a scheduled ESP acquisition three seconds after the selected civil-minute stamp. Manual M.SET bypasses that delay. Motor phase, PWM lifecycle and time-correction rules are unchanged. The temporary RC6BF reset recorder and cookie handling are not included.
+
+## Seconds rate and drive
+
+RC6BH/RC6BI refresh the Stop2Go period from an accepted filtered RTC rate reference during a valid parked 960-pulse lap. The target change is bounded to 1% with a two-count deadband. Only RAM targets change there; the existing released-gap handover and ramp apply them without stopping/resetting TIM3. Normal modes do not use this rate refresh. RC6BI additionally selects MODE 11 on PA7/PB0 for runtime PWM; minute and homing/coarse drive are unchanged. See [source evidence](SOURCES.md#seconds-output-drive-evidence).
